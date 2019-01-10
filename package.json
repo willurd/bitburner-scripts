@@ -1,5 +1,9 @@
 {
   "name": "bitburner-scripts",
+  "description": "Files and scripts for the browser game Bitburner",
+  "license": "MIT",
+  "author": "Will Bowers <william.bowers@gmail.com>",
+  "private": true,
   "scripts": {
     "test": "cross-env NODE_ENV=test jest"
   },
