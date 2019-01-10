@@ -1,0 +1,23 @@
+The Beginner's Guide to Hacking
+
+Some resources:
+
+Learn to Program - https://bitburner.readthedocs.io/en/latest/netscriptlearntoprogram.html
+
+For Experienced JavaScript Developers: NetscriptJS - https://bitburner.readthedocs.io/en/latest/netscriptjs.html
+
+Netscript Documentation - https://bitburner.readthedocs.io/en/latest/netscript.html
+
+When starting out, hacking is the most profitable way to earn money and progress. This is a brief collection of tips/pointers on how to make the most out of your hacking scripts.
+
+-hack() and grow() both work by percentages. hack() steals a certain percentage of the money on a server, and grow() increases the amount of money on a server by some percentage (multiplicatively)
+
+-Because hack() and grow() work by percentages, they are more effective if the target server has a high amount of money. Therefore, you should try to increase the amount of money on a server (using grow()) to a certain amount before hacking it. Two import Netscript functions for this are getServerMoneyAvailable() and getServerMaxMoney()
+
+-Keep security level low. Security level affects everything when hacking. Two important Netscript functions for this are getServerSecurityLevel() and getServerMinSecurityLevel()
+
+-Purchase additional servers by visiting 'Alpha Enterprises' in the city. They are relatively cheap and give you valuable RAM to run more scripts early in the game
+
+-Prioritize upgrading the RAM on your home computer. This can also be done at 'Alpha Enterprises'
+
+-Many low level servers have free RAM. You can use this RAM to run your scripts. Use the scp Terminal or Netscript command to copy your scripts onto these servers and then run them.

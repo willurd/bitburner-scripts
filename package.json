@@ -1,0 +1,56 @@
+{
+  "name": "bitburner-scripts",
+  "scripts": {
+    "test": "cross-env NODE_ENV=test jest"
+  },
+  "dependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.2.3",
+    "@babel/plugin-proposal-decorators": "^7.2.3",
+    "@babel/preset-env": "^7.2.3",
+    "@babel/preset-react": "^7.0.0",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "cross-env": "^5.2.0",
+    "jest": "^23.6.0",
+    "random": "^2.0.13"
+  },
+  "jest": {
+    "modulePaths": [
+      "<rootDir>/src",
+      "<rootDir>/test",
+      "<rootDir>/node_modules"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "ns"
+    ],
+    "verbose": true,
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/test/**/*.test.js"
+    ],
+    "transform": {
+      "^.+\\.(js|ns)$": "babel-jest"
+    },
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/"
+    ],
+    "setupFiles": [
+      "<rootDir>/test/setup.js"
+    ]
+  },
+  "prettier": {
+    "printWidth": 120,
+    "trailingComma": "all",
+    "tabWidth": 2,
+    "useTabs": false,
+    "semi": true,
+    "singleQuote": true,
+    "jsxSingleQuote": false,
+    "bracketSpacing": true,
+    "jsxBracketSameLine": false,
+    "arrowParens": "always"
+  }
+}

@@ -1,0 +1,28 @@
+// TODO: This algorithm is pretty slow for larger problems. It can
+// probably be improved.
+export default function stockMarketProfit(stocks, transactionCount, i = 0) {
+  if (transactionCount <= 0) {
+    return 0;
+  }
+
+  const len = stocks.length;
+  let max = 0;
+
+  // Find the next number whose next number is larger than it. This can shave
+  // a few off the front to cut down the time this takes.
+  while (i <= len - 2 && stocks[i] >= stocks[i + 1]) {
+    i++;
+  }
+
+  for (; i <= len - 2; i++) {
+    for (let j = i + 1; j <= len - 1; j++) {
+      const profit = stocks[j] - stocks[i];
+
+      if (profit > 0) {
+        max = Math.max(max, profit + stockMarketProfit(stocks, transactionCount - 1, j + 1));
+      }
+    }
+  }
+
+  return max;
+}

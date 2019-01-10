@@ -1,0 +1,28 @@
+/**
+ * Prints out the path, from `home`, that is required to connect
+ * to the given host.
+ */
+
+import { forEachHost } from './lib-hosts.ns';
+
+export async function main(ns) {
+  const [searchHost] = ns.args;
+
+  if (!searchHost) {
+    return ns.tprint(`Usage: run hostpath.ns &lt;host>`);
+  }
+
+  let foundHost = false;
+
+  await forEachHost(ns, async (host, path, adjacent) => {
+    if (host === searchHost) {
+      ns.tprint(path.concat([host]).join(' > '));
+      foundHost = true;
+      return true;
+    }
+  });
+
+  if (!foundHost) {
+    ns.tprint(`Unable to find host "${searchHost}"`);
+  }
+}
