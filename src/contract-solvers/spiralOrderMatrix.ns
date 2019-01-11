@@ -33,7 +33,7 @@ export default function spiralOrderMatrix(matrix) {
     }
     right--;
 
-    if (top < bottom) {
+    if (top <= bottom) {
       // Add bottom row
       for (let col = right; col >= left; col--) {
         array.push(matrix[bottom][col]);
@@ -41,7 +41,7 @@ export default function spiralOrderMatrix(matrix) {
       bottom--;
     }
 
-    if (left < right) {
+    if (left <= right) {
       // Add left column
       for (let row = bottom; row >= top; row--) {
         array.push(matrix[row][left]);

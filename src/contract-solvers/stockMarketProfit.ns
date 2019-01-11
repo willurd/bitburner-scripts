@@ -1,28 +1,25 @@
-// TODO: This algorithm is pretty slow for larger problems. It can
-// probably be improved.
-export default function stockMarketProfit(stocks, transactionCount, i = 0) {
-  if (transactionCount <= 0) {
-    return 0;
-  }
+export default function stockMarketProfit(stocks, maxTransactions = stocks.length - 1) {
+  const n = stocks.length;
+  const k = maxTransactions;
+  const table = Array.from({ length: k + 1 }, () => Array.from({ length: n + 1 }, () => 0));
 
-  const len = stocks.length;
-  let max = 0;
+  // For each number of transactions.
+  for (let t = 1; t <= k; t++) {
+    // For each day.
+    for (let d = 1; d < n; d++) {
+      let max = Number.NEGATIVE_INFINITY;
 
-  // Find the next number whose next number is larger than it. This can shave
-  // a few off the front to cut down the time this takes.
-  while (i <= len - 2 && stocks[i] >= stocks[i + 1]) {
-    i++;
-  }
-
-  for (; i <= len - 2; i++) {
-    for (let j = i + 1; j <= len - 1; j++) {
-      const profit = stocks[j] - stocks[i];
-
-      if (profit > 0) {
-        max = Math.max(max, profit + stockMarketProfit(stocks, transactionCount - 1, j + 1));
+      // For each day up to this day.
+      for (let l = 0; l < d; l++) {
+        // Take the current max, or the profit from this sale plus the maximum profit
+        // of t-1 transactions up until this point.
+        max = Math.max(max, stocks[d] - stocks[l] + table[t - 1][l]);
       }
+
+      // But don't go backward (in case this is a negative transaction).
+      table[t][d] = Math.max(max, table[t][d - 1]);
     }
   }
 
-  return max;
+  return table[k][n - 1];
 }

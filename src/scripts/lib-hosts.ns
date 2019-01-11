@@ -33,4 +33,17 @@ export const forEachHost = async (ns, fn, sleepMs = 5) => {
   }
 };
 
+export const getHostPath = async (ns, host) => {
+  let hostPath;
+
+  await forEachHost(ns, async (host, path, adjacent) => {
+    if (host === searchHost) {
+      hostPath = path.concat([host]);
+      return true;
+    }
+  });
+
+  return hostPath;
+};
+
 // TODO: Add `forEachOwnedHost`

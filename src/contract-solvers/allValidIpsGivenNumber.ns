@@ -16,6 +16,11 @@ export default function allValidIpsGivenNumber(num, size = 4) {
     // "IP addresses" of a smaller size.
     const segment = num.slice(0, i + 1);
 
+    // A segment can't start with '0' unless the segment is exactly '0'.
+    if (segment.length > 1 && segment[0] === '0') {
+      continue;
+    }
+
     if (parseInt(segment, 10) <= 255) {
       ips = ips.concat(allValidIpsGivenNumber(num.slice(i + 1), size - 1).map((ip) => `${segment}.${ip}`));
     }

@@ -12,11 +12,15 @@ export async function main(ns) {
     return ns.tprint(`Usage: run hostpath.ns &lt;host>`);
   }
 
+  // TODO: Use `await getPath(host)` from `lib-hosts.ns`.
   let foundHost = false;
 
   await forEachHost(ns, async (host, path, adjacent) => {
     if (host === searchHost) {
-      ns.tprint(path.concat([host]).join(' > '));
+      const fullPath = path.concat([host]);
+      fullPath.shift();
+      ns.tprint(fullPath.join(' > '));
+      ns.tprint('home; ' + fullPath.map((h) => `connect ${h}`).join('; ') + ';');
       foundHost = true;
       return true;
     }
