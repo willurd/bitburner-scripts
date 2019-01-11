@@ -1,11 +1,11 @@
-import { cmd } from 'lib-inject.ns';
-import { getHostPath } from 'lib-hosts.ns';
+import { cmd } from 'lib-inject.js';
+import { getHostPath } from 'lib-hosts.js';
 
 export async function main(ns) {
   const [host] = ns.args;
 
   if (!host) {
-    return ns.tprint('Usage: run u-go.ns &lt;host>');
+    return ns.tprint('Usage: run u-go.js &lt;host>');
   }
 
   const path = await getHostPath(ns, host);

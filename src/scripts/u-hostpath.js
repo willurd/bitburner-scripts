@@ -3,16 +3,16 @@
  * to the given host.
  */
 
-import { forEachHost } from './lib-hosts.ns';
+import { forEachHost } from './lib-hosts.js';
 
 export async function main(ns) {
   const [searchHost] = ns.args;
 
   if (!searchHost) {
-    return ns.tprint(`Usage: run hostpath.ns &lt;host>`);
+    return ns.tprint(`Usage: run hostpath.js &lt;host>`);
   }
 
-  // TODO: Use `await getPath(host)` from `lib-hosts.ns`.
+  // TODO: Use `await getPath(host)` from `lib-hosts.js`.
   let foundHost = false;
 
   await forEachHost(ns, async (host, path, adjacent) => {

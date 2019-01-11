@@ -15,7 +15,7 @@
  *   - `getStockForecast(sym)` - 2.5 GB
  *
  * These functions return data that either never changes or changes very
- * rarely. Run `sm-update-config.ns` to call these and save their outputs
+ * rarely. Run `sm-update-config.js` to call these and save their outputs
  * to `sm-config.txt`.
  *
  *   - `getStockSymbols()` - 2 GB
@@ -26,8 +26,8 @@
  * TODO: Implement shorting stocks when available.
  */
 
-import { loadConfig, saveConfig, updaterScript, commission, buildStock, sellPositions } from 'sm-utils.ns';
-import { formatMoney } from 'lib-money.ns';
+import { loadConfig, saveConfig, updaterScript, commission, buildStock, sellPositions } from 'sm-utils.js';
+import { formatMoney } from 'lib-money.js';
 
 const canUseScript = (ns) => {
   const config = loadConfig(ns);
@@ -51,7 +51,7 @@ const canUseScript = (ns) => {
   return canUse;
 };
 
-// TODO: Move these functions to `sm-utils.ns`.
+// TODO: Move these functions to `sm-utils.js`.
 const isStockHeld = (stock) => stock.position[0] > 0;
 const getHeldStocks = (stocks) => stocks.filter(isStockHeld);
 const getGoodStocks = (stocks) => stocks.filter((stock) => stock.forecast > 0.6);

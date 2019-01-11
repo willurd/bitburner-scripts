@@ -1,6 +1,6 @@
-import { formatMoney } from 'lib-money.ns';
+import { formatMoney } from 'lib-money.js';
 
-export const updaterScript = 'sm-update-config.ns';
+export const updaterScript = 'sm-update-config.js';
 export const configFile = 'sm-config.txt';
 export const commission = { buy: 100000, sell: 100000 };
 commission.total = commission.buy + commission.sell;

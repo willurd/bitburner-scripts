@@ -1,4 +1,4 @@
-import { LinkedList } from './lib-ds.ns';
+import { LinkedList } from './lib-ds.js';
 
 export const forEachHost = async (ns, fn, sleepMs = 5) => {
   const seenHosts = new Set();

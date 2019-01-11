@@ -1,4 +1,4 @@
-import stockMarketProfit from '../../src/contract-solvers/stockMarketProfit.ns';
+import stockMarketProfit from '../../src/contract-solvers/stockMarketProfit.js';
 
 const contract = (name, arrayString, expected, maxTransactions) => {
   test(name, () => {

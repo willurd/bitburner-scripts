@@ -1,4 +1,4 @@
-import numberOfWaysToWriteAsSum from '../../src/contract-solvers/numberOfWaysToWriteAsSum.ns';
+import numberOfWaysToWriteAsSum from '../../src/contract-solvers/numberOfWaysToWriteAsSum.js';
 
 const contract = (name, num, expected) => {
   test(name, () => {

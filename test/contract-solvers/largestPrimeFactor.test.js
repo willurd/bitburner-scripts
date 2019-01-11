@@ -1,4 +1,4 @@
-import largestPrimeFactor from '../../src/contract-solvers/largestPrimeFactor.ns';
+import largestPrimeFactor from '../../src/contract-solvers/largestPrimeFactor.js';
 
 const contract = (name, num, expected) => {
   test(name, () => {

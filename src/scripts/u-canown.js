@@ -2,8 +2,8 @@
  * Prints out all hosts that are ownable, but not currently owned.
  */
 
-import { forEachHost } from './lib-hosts.ns';
-import { hacks } from './constants.ns';
+import { forEachHost } from './lib-hosts.js';
+import { hacks } from './constants.js';
 
 export async function main(ns) {
   // TODO: Accept an optional hostname argument. If given, only check that host.

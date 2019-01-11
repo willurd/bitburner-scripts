@@ -1,10 +1,10 @@
 /**
  * This script calls static or effectively static TIX API functions
  * and saves their values to `sm-config.txt`, saving precious GBs of
- * RAM in `sm-daemon.ns`.
+ * RAM in `sm-daemon.js`.
  */
 
-import { loadConfig, saveConfig } from './sm-utils.ns';
+import { loadConfig, saveConfig } from './sm-utils.js';
 
 export async function main(ns) {
   const config = loadConfig(ns);
