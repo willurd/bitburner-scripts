@@ -1,4 +1,4 @@
-import canJumpToLastIndex from '../../src/contract-solvers/canJumpToLastIndex.js';
+import canJumpToLastIndex from '../../src/contract-solvers/canJumpToLastIndex';
 
 const contract = (name, arrayString, expected) => {
   test(name, () => {

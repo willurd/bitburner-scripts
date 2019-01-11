@@ -1,4 +1,4 @@
-import { forEachHost } from '../../src/scripts/lib-hosts.js';
+import { forEachHost } from '../../src/scripts/lib-hosts';
 
 describe('forEachHost', () => {
   it('calls the given function for each host in the network', async () => {

@@ -1,4 +1,4 @@
-import allValidIpsGivenNumber from '../../src/contract-solvers/allValidIpsGivenNumber.js';
+import allValidIpsGivenNumber from '../../src/contract-solvers/allValidIpsGivenNumber';
 
 const contract = (name, num, expected) => {
   test(name, () => {

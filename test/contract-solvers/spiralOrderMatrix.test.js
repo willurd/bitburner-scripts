@@ -1,4 +1,4 @@
-import spiralOrderMatrix, { mtx } from '../../src/contract-solvers/spiralOrderMatrix.js';
+import spiralOrderMatrix, { mtx } from '../../src/contract-solvers/spiralOrderMatrix';
 
 const contract = (name, matrixString, expectedString) => {
   test(name, () => {

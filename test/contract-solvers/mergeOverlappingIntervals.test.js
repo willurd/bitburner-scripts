@@ -1,4 +1,4 @@
-import mergeOverlappingIntervals from '../../src/contract-solvers/mergeOverlappingIntervals.js';
+import mergeOverlappingIntervals from '../../src/contract-solvers/mergeOverlappingIntervals';
 
 const contract = (name, array, expected) => {
   test(name, () => {

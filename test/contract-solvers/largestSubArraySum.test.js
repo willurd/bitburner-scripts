@@ -1,4 +1,4 @@
-import largestSubArraySum from '../../src/contract-solvers/largestSubArraySum.js';
+import largestSubArraySum from '../../src/contract-solvers/largestSubArraySum';
 
 const contract = (name, arrayString, expected) => {
   test(name, () => {
