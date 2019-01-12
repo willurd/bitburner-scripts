@@ -16,9 +16,9 @@ export const WAIT_MS = 10000;
 
 // Files that may need to be references explicitly.
 export const BN_FLAG_FILE = 'bn-flag.txt';
-export const BN_WEAKEN_FILE = 'bn-weaken.ns';
-export const BN_HACK_FILE = 'bn-hack.ns';
-export const BN_GETMONEY_FILE = 'bn-getmoney.ns';
+export const BN_WEAKEN_FILE = 'bn-weaken.js';
+export const BN_HACK_FILE = 'bn-hack.js';
+export const BN_GETMONEY_FILE = 'bn-getmoney.js';
 
 // All files that need to be propagated throughout the network.
 export const BN_FILES = [
@@ -28,6 +28,7 @@ export const BN_FILES = [
   'lib-hosts.js',
   'api.js',
   'bn-utils.js',
+  'bn-boot.js',
   'bn-boot-1.js',
   'bn-boot-2.js',
   'bn-boot-3.js',
@@ -76,8 +77,8 @@ export const setStep = (ns, step, data = {}) => {
   });
 };
 
-export const setPropagatedTo = (propagatedTo) => {
-  return setDbKeys({ propagatedTo });
+export const setPropagatedTo = (ns, propagatedTo) => {
+  return setDbKeys(ns, { propagatedTo });
 };
 
 export const phase = async (ns, number, name, fn) => {
@@ -85,7 +86,7 @@ export const phase = async (ns, number, name, fn) => {
   setPhase(ns, number, name);
   const ret = await fn(ns);
   log(ns, `Phase ${number} (${name}) complete.`);
-  await ns.sleep(1000);
+  setStep(ns, 'done');
   nextBootPhase(ns);
 };
 

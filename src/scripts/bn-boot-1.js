@@ -2,11 +2,6 @@ import { log, BN_FLAG_FILE, CNC_HOST, phase, setStep } from 'bn-boot.js';
 import { forEachHost } from 'lib-hosts.js';
 
 export async function main(ns) {
-  if (ns.args[0] === 'size') {
-    const script = ns.getScriptName();
-    return ns.tprint(`${script} => ${ns.getScriptRam(script)}`);
-  }
-
   await phase(ns, 1, 'prepare', async () => {
     const thisHost = ns.getHostname();
 
@@ -19,8 +14,12 @@ export async function main(ns) {
       // constantly starting and stopping each-others processes, etc.
 
       await forEachHost(ns, async (host, path, adjacent) => {
+        if (host === CNC_HOST) {
+          return;
+        }
+
         if (ns.fileExists(BN_FLAG_FILE, host)) {
-          log(`Removing ${BN_FLAG_FILE} from host: ${host}`);
+          log(ns, `Removing ${BN_FLAG_FILE} from host: ${host}`);
           ns.rm(BN_FLAG_FILE, host);
         }
       });

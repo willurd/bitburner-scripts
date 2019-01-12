@@ -17,20 +17,18 @@ export const loadDb = (ns) => {
     const json = JSON.parse(content);
     return Object.assign({}, dbDefaults, json);
   } catch (e) {
-    ns.tprint(e.toString());
     return Object.assign({}, dbDefaults);
   }
 };
 
 export const saveDb = (ns, db) => {
-  ns.clear(dbFile);
-  ns.write(dbFile, JSON.stringify(db, null, 2));
+  ns.write(dbFile, JSON.stringify(db, null, 2), 'w');
 };
 
 export const updateDb = (ns, fn) => {
   const db = loadDb(ns);
   const updatedDb = fn(db);
-  saveDb(ns, db);
+  saveDb(ns, updatedDb);
 };
 
 export const setDbKey = (ns, key, value) => {

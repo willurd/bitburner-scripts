@@ -55,16 +55,31 @@ export async function main(ns) {
   let ok = true;
 
   switch (action) {
-    case 'date':
-      // You could spawn() a new script and pass it `responseFileName` if you
-      // needed to keep this script light on RAM usage. As long as
-      // `responseFileName` gets written, the request will complete.
+    // You could spawn() a new script and pass it `responseFileName` if you
+    // needed to keep this script light on RAM usage. As long as
+    // `responseFileName` gets written, the request will complete.
+
+    case 'readFile': {
+      const [fileName] = args;
+
+      if (!fileName) {
+        result = `Action 'readFile' requires a file name`;
+      } else {
+        result = ns.read(fileName);
+      }
+
+      break;
+    }
+
+    case 'date': {
       result = new Date().toString();
       break;
+    }
 
-    default:
+    default: {
       ok = false;
       result = 'An unknown action was requested';
+    }
   }
 
   // This could be any value. I choose JSON as a "universal" format for

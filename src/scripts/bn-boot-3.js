@@ -1,14 +1,9 @@
-import { WAIT_MS, BN_FLAG_FILE, phase, setStep, getAdjacentHosts } from 'bn-boot.js';
+import { WAIT_MS, BN_FILES, BN_FLAG_FILE, phase, setStep, setPropagatedTo, getAdjacentHosts } from 'bn-boot.js';
 
 export async function main(ns) {
-  if (ns.args[0] === 'size') {
-    const script = ns.getScriptName();
-    return ns.tprint(`${script} => ${ns.getScriptRam(script)}`);
-  }
-
   await phase(ns, 3, 'propagation', async () => {
     const thisHost = ns.getHostname();
-    const thisScript = ns.getScriptName();
+    const bootScript = 'bn-boot.js';
     const hosts = getAdjacentHosts(ns);
     const propagatedTo = [];
 
@@ -21,28 +16,30 @@ export async function main(ns) {
         continue;
       }
 
-      setStep(ns, 'killing all processes', { i, host });
+      setStep(ns, 'killing all remote processes', { i, host });
       await ns.killall(host);
 
       const files = ns.ls(host);
-      setStep(ns, 'removing all files', { i, host, files });
+      setStep(ns, 'removing all remote files', { i, host, files });
       for (const file of files) {
         await ns.rm(file, host);
       }
 
-      setStep(ns, `propagating ${thisScript}`, { i, host });
-      while (!(await ns.scp(thisScript, thisHost, host))) {
-        await ns.sleep(WAIT_MS);
+      setStep(ns, `propagating botnet files`, { i, host });
+      for (const bnFile of BN_FILES) {
+        while (!(await ns.scp(bnFile, thisHost, host))) {
+          await ns.sleep(WAIT_MS);
+        }
       }
 
-      setStep(ns, `executing remote ${thisScript}`, { i, host });
-      while (!(await ns.exec(thisScript, host, 1))) {
-        await ns.sleep(WAIT_MS);
-      }
+      setStep(ns, `executing remote ${bootScript}`, { i, host });
 
+      await ns.exec(bootScript, host, 1);
       propagatedTo.push(host);
+
+      await ns.sleep(1000);
     }
 
-    setPropagatedTo(propagatedTo);
+    setPropagatedTo(ns, propagatedTo);
   });
 }

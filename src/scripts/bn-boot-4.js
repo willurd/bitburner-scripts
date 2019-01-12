@@ -3,11 +3,6 @@ import { updateDb, setDbKeys } from 'bn-utils.js';
 import { hacks } from 'constants.js';
 
 export async function main(ns) {
-  if (ns.args[0] === 'size') {
-    const script = ns.getScriptName();
-    return ns.tprint(`${script} => ${ns.getScriptRam(script)}`);
-  }
-
   await phase(ns, 4, 'owning', async () => {
     if (isCommandHost(ns)) {
       return;
@@ -18,7 +13,7 @@ export async function main(ns) {
 
     const thisHost = ns.getHostname();
 
-    while (!ns.hasRootAccess()) {
+    while (!ns.hasRootAccess(thisHost)) {
       let canOwn = false;
 
       do {
@@ -58,7 +53,7 @@ export async function main(ns) {
       setStep(ns, 'Nuking');
       ns.nuke(thisHost);
 
-      if (!ns.hasRootAccess()) {
+      if (!ns.hasRootAccess(thisHost)) {
         setStep(ns, `Unable to own. Trying again in ${WAIT_MS}ms.`);
         // Something didn't work. This is probably not possible.
         await ns.sleep(WAIT_MS);
@@ -66,7 +61,7 @@ export async function main(ns) {
     }
 
     setStep(ns, 'Owned! Removing debug data from db.');
-    updateDb((db) => {
+    updateDb(ns, (db) => {
       const newDb = Object.assign({}, db);
       delete newDb.requiredHackingLevel;
       delete newDb.hackingLevel;

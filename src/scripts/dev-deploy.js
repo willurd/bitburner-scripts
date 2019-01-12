@@ -1,25 +1,7 @@
 const SCRIPTS = [
-  'constants.js',
   'lib-ds.js',
   'lib-hosts.js',
-  'bn-utils.js',
-  'api-utils.js',
-  'api.js',
-  'bn-flag.txt',
-  'bn-deploy.js',
-  'bn-boot.js',
-  'bn-boot-1.js',
-  'bn-boot-2.js',
-  'bn-boot-3.js',
-  'bn-boot-4.js',
-  'bn-boot-5.js',
-  'bn-boot-6.js',
-  'bn-getmoney.js',
-  'bn-hack.js',
-  'bn-own.js',
-  'bn-report.js',
-  'bn-update-owned.js',
-  'bn-weaken.js',
+  'dev-server-ram.js',
 ];
 
 const joinPath = (...parts) => parts.join('/');
