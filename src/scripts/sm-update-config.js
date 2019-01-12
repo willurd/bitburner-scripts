@@ -4,7 +4,7 @@
  * RAM in `sm-daemon.js`.
  */
 
-import { loadConfig, saveConfig } from './sm-utils.js';
+import { loadConfig, saveConfig } from 'sm-utils.js';
 
 export async function main(ns) {
   const config = loadConfig(ns);

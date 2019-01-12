@@ -132,7 +132,7 @@ const tick = async (ns, state, config, iteration, isSimulated) => {
 
         const sharesCost = shares * bestStock.price;
 
-        if (!isStockHeld(bestStock) || sharesCost >= commission.total * 25) {
+        if (!isStockHeld(bestStock) || sharesCost >= commission.total * 100) {
           // Don't waste commission money buying stocks worth less than the commission.
           const totalCost = sharesCost + commission.buy;
           ns.tprint(

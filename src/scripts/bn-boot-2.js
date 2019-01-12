@@ -9,6 +9,7 @@ const getFilesFromHosts = async (ns, hosts, files) => {
       if (ns.fileExists(file, host)) {
         log(`Host "${host}" has file "${file}". Downloading.`);
         await ns.scp(file, host, thisHost);
+        await ns.sleep(1000);
       }
     }
   }
@@ -25,6 +26,11 @@ export const allFilesExist = (ns, host, files) => {
 };
 
 export async function main(ns) {
+  if (ns.args[0] === 'size') {
+    const script = ns.getScriptName();
+    return ns.tprint(`${script} => ${ns.getScriptRam(script)}`);
+  }
+
   await phase(ns, 2, 'setup', async () => {
     if (isCommandHost(ns)) {
       return;

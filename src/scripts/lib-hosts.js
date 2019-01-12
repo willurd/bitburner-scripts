@@ -2,7 +2,7 @@
  * TODO: Test me!
  */
 
-import { LinkedList } from './lib-ds.js';
+import { LinkedList } from 'lib-ds.js';
 
 export const forEachHost = async (ns, fn, sleepMs = 5) => {
   const seenHosts = new Set();

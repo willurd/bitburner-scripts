@@ -2,13 +2,13 @@
  * Owns the given host if possible.
  */
 
-import { hacks } from './constants.js';
+import { hacks } from 'constants.js';
 
 export async function main(ns) {
   const [host] = ns.args;
 
   if (!host) {
-    return ns.tprint('Usage: run own.js &lt;host>');
+    return ns.tprint('Usage: run bn-own.js &lt;host>');
   }
 
   ns.tprint(`Attempting to hack host "${host}"`);

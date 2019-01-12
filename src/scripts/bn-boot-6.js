@@ -1,6 +1,11 @@
 import { BN_WEAKEN_FILE, BN_HACK_FILE, log, phase, setPhase, isCommandHost } from 'bn-boot.js';
 
 export async function main(ns) {
+  if (ns.args[0] === 'size') {
+    const script = ns.getScriptName();
+    return ns.tprint(`${script} => ${ns.getScriptRam(script)}`);
+  }
+
   await phase(ns, 6, 'starting', async () => {
     // TODO: Figure out how security levels and weakening actually work!
 

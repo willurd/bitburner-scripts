@@ -3,7 +3,7 @@
  * to the given host.
  */
 
-import { forEachHost } from './lib-hosts.js';
+import { forEachHost } from 'lib-hosts.js';
 
 export async function main(ns) {
   const [searchHost] = ns.args;

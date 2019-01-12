@@ -2,6 +2,11 @@ import { log, BN_FLAG_FILE, CNC_HOST, phase, setStep } from 'bn-boot.js';
 import { forEachHost } from 'lib-hosts.js';
 
 export async function main(ns) {
+  if (ns.args[0] === 'size') {
+    const script = ns.getScriptName();
+    return ns.tprint(`${script} => ${ns.getScriptRam(script)}`);
+  }
+
   await phase(ns, 1, 'prepare', async () => {
     const thisHost = ns.getHostname();
 

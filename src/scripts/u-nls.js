@@ -2,6 +2,8 @@
  * "ls" over all hosts in the network.
  */
 
+import { forEachHost } from 'lib-hosts';
+
 export async function main(ns) {
   const [testString] = ns.args;
   const test = testString && new RegExp(testString);
