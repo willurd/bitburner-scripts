@@ -3,7 +3,6 @@
  * you get what step of the owning they are in.
  */
 
-import { loadDb, saveDb, updateDb, setDbKeys } from 'bn-utils.js';
 import { forEachHost } from 'lib-hosts.js';
 
 const BN_FLAG_FILE = 'bn-flag.txt';

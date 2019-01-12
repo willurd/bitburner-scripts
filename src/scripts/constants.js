@@ -1,3 +1,7 @@
+/**
+ * TODO: Rename this file to something more descriptive.
+ */
+
 export const hacks = [
   {
     filename: 'BruteSSH.exe',
