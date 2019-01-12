@@ -48,7 +48,7 @@ export const getUniqueFileName = (ns, host) => {
   do {
     // The probability of generating the same uuid is close to zero,
     // but why take a chance when it's so easy to double check?
-    fileName = uuid() + '.txt';
+    fileName = `api-temp-${uuid()}.txt`;
     // Make sure the file doesn't exist on this
   } while (ns.fileExists(fileName) || ns.fileExists(fileName, host));
 

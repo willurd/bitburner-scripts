@@ -4,6 +4,7 @@ const allValidIpsGivenNumber = require('../src/contract-solvers/allValidIpsGiven
 const largestPrimeFactor = require('../src/contract-solvers/largestPrimeFactor').default;
 const numberOfWaysToWriteAsSum = require('../src/contract-solvers/numberOfWaysToWriteAsSum').default;
 const { default: spiralOrderMatrix, mtx } = require('../src/contract-solvers/spiralOrderMatrix');
+const canJumpToLastIndex = require('../src/contract-solvers/canJumpToLastIndex').default;
 
 const solvers = [
   {
@@ -11,6 +12,7 @@ const solvers = [
     solve: (num) => {
       const result = allValidIpsGivenNumber(num);
       console.log(`[${result.join(', ')}]`);
+      console.log(JSON.stringify(result));
     },
   },
   {
@@ -32,6 +34,14 @@ const solvers = [
     solve: (...matrix) => {
       const result = spiralOrderMatrix(mtx([matrix.join('\n')]));
       console.log(`[${result.join(',')}]`);
+    },
+  },
+  {
+    name: 'canJumpToLastIndex',
+    solve: (numsString) => {
+      const nums = numsString.split(',').map(Number);
+      const result = canJumpToLastIndex(nums);
+      console.log(result);
     },
   },
 ];

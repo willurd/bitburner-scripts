@@ -8,6 +8,7 @@ const contract = (name, num, expected) => {
 };
 
 describe('allValidIpsGivenNumber', () => {
+  contract('contract-171069', 2507282126, ['250.72.82.126']);
   contract('contract-419046', 1061234377, ['106.123.43.77']);
   contract('contract-537131', 229140157164, ['229.140.157.164']);
   contract('contract-544930', 2339939200, ['233.99.39.200']);
