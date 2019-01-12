@@ -7,7 +7,7 @@
   "scripts": {
     "test": "cross-env NODE_ENV=test jest",
     "solve": "node ./scripts/solve.js",
-    "script-server": "cd src && http-server"
+    "script-server": "cd src && http-server --cors"
   },
   "dependencies": {
     "@babel/core": "^7.2.2",
