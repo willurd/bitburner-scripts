@@ -5,7 +5,7 @@
 
 export async function main(ns) {
   const host = ns.args[0] || ns.getHostname();
-  const sleepMs = parseInt(ns.args[1] || '0', 10);
+  const sleepMs = parseInt(ns.args[1] || '5000', 10);
 
   while (true) {
     await ns.hack(host);

@@ -23,6 +23,8 @@
  *   - `purchase4SMarketDataTixApi()` - 2.5 GB
  *   - Total: 7 GB saved in this script.
  *
+ * TODO: This script is terrible when you have very little money. It only really
+ *       becomes viable after you have maybe $15/$20 million.
  * TODO: Implement shorting stocks when available.
  */
 
@@ -104,7 +106,7 @@ const tick = async (ns, state, config, iteration, isSimulated) => {
     const moneyInStocks = heldStocks.reduce((acc, stock) => acc + getPositionValue(stock), 0);
     const totalMoney = currentMoney + moneyInStocks;
     const minimumCashOnHand = Math.max(config.minimumCashOnHand, totalMoney * config.minimumCashPercent);
-    const availableMoney = currentMoney - minimumCashOnHand;
+    const availableMoney = currentMoney - minimumCashOnHand - commission.buy;
 
     // TODO: Sell some shares if I need more cash on hand, given the config.
 
@@ -129,15 +131,19 @@ const tick = async (ns, state, config, iteration, isSimulated) => {
         }
 
         const sharesCost = shares * bestStock.price;
-        const totalCost = sharesCost + commission.buy;
-        ns.tprint(
-          `Purchasing ${shares} shares${isStockHeld(bestStock) ? ' more' : ''} of ${
-            bestStock.symbol
-          } at a total of ${formatMoney(totalCost)}.`,
-        );
 
-        if (!isSimulated) {
-          ns.buyStock(bestStock.symbol, shares);
+        if (!isStockHeld(bestStock) || sharesCost >= commission.total * 25) {
+          // Don't waste commission money buying stocks worth less than the commission.
+          const totalCost = sharesCost + commission.buy;
+          ns.tprint(
+            `Purchasing ${shares} shares${isStockHeld(bestStock) ? ' more' : ''} of ${
+              bestStock.symbol
+            } at a total of ${formatMoney(totalCost)}.`,
+          );
+
+          if (!isSimulated) {
+            ns.buyStock(bestStock.symbol, shares);
+          }
         }
       }
     }
