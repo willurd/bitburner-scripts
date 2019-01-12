@@ -1,6 +1,5 @@
 import { setDbKeys } from 'bn-utils.js';
 import { forEachHost } from 'lib-hosts.js';
-import { hacks } from 'constants.js';
 
 /**
  * TODO: This is pretty much an FSM. Write some nice utilities for FSMs.
@@ -34,6 +33,7 @@ export const BN_FILES = [
   'bn-boot-4.js',
   'bn-boot-5.js',
   'bn-boot-6.js',
+  'api.js',
   BN_WEAKEN_FILE,
   BN_HACK_FILE,
   BN_GETMONEY_FILE,

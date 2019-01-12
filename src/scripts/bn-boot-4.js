@@ -1,8 +1,9 @@
 import { phase, setStep, isCommandHost } from 'bn-boot.js';
 import { updateDb, setDbKeys } from 'bn-utils.js';
+import { hacks } from 'constants.js';
 
 export async function main(ns) {
-  await phase(ns, 4, 'owning', async (ns) => {
+  await phase(ns, 4, 'owning', async () => {
     if (isCommandHost(ns)) {
       return;
     }

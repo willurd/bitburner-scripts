@@ -1,4 +1,6 @@
 const SCRIPTS = [
+  'api.js',
+  'api-utils.js',
   'bn-boot-1.js',
   'bn-boot-2.js',
   'bn-boot-3.js',
@@ -35,7 +37,6 @@ export async function main(ns) {
 
     if (!success) {
       ns.tprint(`Unable to download script from url: ${url}`);
-      return;
     }
   }
 

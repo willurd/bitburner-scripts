@@ -1,7 +1,7 @@
 import { BN_WEAKEN_FILE, BN_HACK_FILE, log, phase, setPhase, isCommandHost } from 'bn-boot.js';
 
 export async function main(ns) {
-  await phase(ns, 6, 'starting', async (ns) => {
+  await phase(ns, 6, 'starting', async () => {
     // TODO: Figure out how security levels and weakening actually work!
 
     if (isCommandHost(ns)) {
@@ -24,7 +24,9 @@ export async function main(ns) {
       const serverRam = ns.getServerRam(thisHost)[0];
       const weakenRam = ns.getScriptRam(BN_WEAKEN_FILE, thisHost);
       const hackRam = ns.getScriptRam(BN_HACK_FILE, thisHost);
-      const availableHackRam = serverRam - weakenRam;
+      // Leave this much ram for making API requests.
+      const apiRam = 3;
+      const availableHackRam = serverRam - weakenRam - apiRam;
       const availableHackThreads = Math.floor(availableHackRam / hackRam);
 
       log(ns, `Spawning ${BN_HACK_FILE} with ${availableHackThreads} threads`);

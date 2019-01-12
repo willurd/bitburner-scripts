@@ -1,7 +1,7 @@
 import { WAIT_MS, BN_FLAG_FILE, phase, setStep, getAdjacentHosts } from 'bn-boot.js';
 
 export async function main(ns) {
-  await phase(ns, 3, 'propagation', async (ns) => {
+  await phase(ns, 3, 'propagation', async () => {
     const thisHost = ns.getHostname();
     const thisScript = ns.getScriptName();
     const hosts = getAdjacentHosts(ns);

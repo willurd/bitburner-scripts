@@ -25,7 +25,7 @@ export const allFilesExist = (ns, host, files) => {
 };
 
 export async function main(ns) {
-  await phase(ns, 2, 'setup', async (ns) => {
+  await phase(ns, 2, 'setup', async () => {
     if (isCommandHost(ns)) {
       return;
     }

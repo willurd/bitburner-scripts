@@ -1,7 +1,7 @@
 import { WAIT_MS, phase, setStep, isCommandHost } from 'bn-boot.js';
 
 export async function main(ns) {
-  await phase(ns, 5, 'hacking', async (ns) => {
+  await phase(ns, 5, 'hacking', async () => {
     if (isCommandHost(ns)) {
       return;
     }
