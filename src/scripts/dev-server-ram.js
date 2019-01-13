@@ -1,4 +1,4 @@
-import { forEachHost } from 'lib-hosts.js';
+import { forEachHost } from './lib-hosts.js';
 
 export async function main(ns) {
   await forEachHost(ns, async (host) => {

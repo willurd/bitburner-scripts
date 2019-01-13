@@ -1,4 +1,4 @@
-import { formatMoney } from 'lib-money.js';
+import { formatMoney } from './lib-money.js';
 
 export const updaterScript = 'sm-update-config.js';
 export const configFile = 'sm-config.txt';

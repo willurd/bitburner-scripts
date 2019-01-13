@@ -1,75 +1,45 @@
-import { phase, setStep, isCommandHost } from 'bn-boot.js';
-import { updateDb, setDbKeys } from 'bn-utils.js';
-import { hacks } from 'constants.js';
+import { WAIT_MS, BN_FILES, BN_FLAG_FILE, phase, setStep, setPropagatedTo, getAdjacentHosts } from './bn-boot.js';
 
 export async function main(ns) {
-  await phase(ns, 4, 'owning', async () => {
-    if (isCommandHost(ns)) {
-      return;
-    }
-
-    // Now that we've propagated this script to all adjacent hosts, it's
-    // time to own this box.
-
+  await phase(ns, 4, 'propagation', async () => {
     const thisHost = ns.getHostname();
+    const bootScript = 'bn-boot.js';
+    const hosts = getAdjacentHosts(ns);
+    const propagatedTo = [];
 
-    while (!ns.hasRootAccess(thisHost)) {
-      let canOwn = false;
+    for (const i in hosts) {
+      const host = hosts[i];
 
-      do {
-        setStep(ns, 'Verifying ability to own this host');
+      setStep(ns, 'checking if host is owned', { i, host });
+      if (ns.fileExists(BN_FLAG_FILE, host)) {
+        // This host has already been owned.
+        continue;
+      }
 
-        const hackingLevel = ns.getHackingLevel();
-        const requiredHackingLevel = ns.getServerRequiredHackingLevel();
-        const availableHacks = hacks.filter(({ filename }) => ns.fileExists(filename, HOME_HOST));
-        const openablePorts = availableHacks.length;
-        const requiredPorts = ns.getServerNumPortsRequired();
-        const canNuke = hackingLevel >= requiredHackingLevel;
-        const canOpenPorts = openablePorts >= requiredPorts;
-        canOwn = canOpenPorts && canNuke;
+      setStep(ns, 'killing all remote processes', { i, host });
+      await ns.killall(host);
 
-        if (!canOwn) {
-          setDbKeys({
-            requiredHackingLevel,
-            hackingLevel,
-            requiredPorts,
-            availablePortHacks,
-            canOpenPorts,
-            canNuke,
-          });
+      const files = ns.ls(host);
+      setStep(ns, 'removing all remote files', { i, host, files });
+      for (const file of files) {
+        await ns.rm(file, host);
+      }
 
+      setStep(ns, `propagating botnet files`, { i, host });
+      for (const bnFile of BN_FILES) {
+        while (!(await ns.scp(bnFile, thisHost, host))) {
           await ns.sleep(WAIT_MS);
         }
-      } while (!canOwn);
-
-      const requiredPorts = ns.getServerNumPortsRequired();
-      for (let i = 0; i < requiredPorts; i++) {
-        const hack = hacks[i];
-        setStep(ns, `Running exe`, { exe: hack.filename });
-        await hack.command(ns, thisHost);
       }
 
-      // 5. Own the box.
-      setStep(ns, 'Nuking');
-      ns.nuke(thisHost);
+      setStep(ns, `executing remote ${bootScript}`, { i, host });
 
-      if (!ns.hasRootAccess(thisHost)) {
-        setStep(ns, `Unable to own. Trying again in ${WAIT_MS}ms.`);
-        // Something didn't work. This is probably not possible.
-        await ns.sleep(WAIT_MS);
-      }
+      await ns.exec(bootScript, host, 1);
+      propagatedTo.push(host);
+
+      await ns.sleep(1000);
     }
 
-    setStep(ns, 'Owned! Removing debug data from db.');
-    updateDb(ns, (db) => {
-      const newDb = Object.assign({}, db);
-      delete newDb.requiredHackingLevel;
-      delete newDb.hackingLevel;
-      delete newDb.requiredPorts;
-      delete newDb.availablePortHacks;
-      delete newDb.canOpenPorts;
-      delete newDb.canNuke;
-      return newDb;
-    });
+    setPropagatedTo(ns, propagatedTo);
   });
 }

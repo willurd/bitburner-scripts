@@ -34,6 +34,8 @@ describe('mergeOverlappingIntervals', () => {
     [[2, 11], [15, 30]],
   );
 
+  contract('contract-703638', [[16, 24], [19, 21], [22, 32], [12, 16], [13, 19], [6, 12]], [[6, 32]]);
+
   contract(
     'contract-915858',
     [

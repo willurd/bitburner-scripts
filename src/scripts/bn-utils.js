@@ -7,8 +7,10 @@ export const dbFile = 'bn-db.txt';
 export const dbDefaults = {
   phase: 'unknown',
   step: '',
-  data: {},
+  stepData: {},
   propagatedTo: [],
+  owned: [],
+  log: [],
 };
 
 export const loadDb = (ns) => {

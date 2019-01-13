@@ -2,7 +2,7 @@
  * TODO: Test me!
  */
 
-import { LinkedList } from 'lib-ds.js';
+import { LinkedList } from './lib-ds.js';
 
 export const forEachHost = async (ns, fn, sleepMs = 5) => {
   const seenHosts = new Set();
@@ -37,6 +37,18 @@ export const forEachHost = async (ns, fn, sleepMs = 5) => {
   }
 };
 
+export const forEachOwnedHost = async (ns, fn, sleepMs = 5) => {
+  return forEachHost(
+    ns,
+    (host, path, adjacent) => {
+      if (ns.hasRootAccess(host)) {
+        fn(host, path, adjacent);
+      }
+    },
+    sleepMs,
+  );
+};
+
 export const getHostPath = async (ns, host) => {
   let hostPath;
 
@@ -49,5 +61,3 @@ export const getHostPath = async (ns, host) => {
 
   return hostPath;
 };
-
-// TODO: Add `forEachOwnedHost`

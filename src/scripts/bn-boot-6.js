@@ -1,4 +1,4 @@
-import { BN_WEAKEN_FILE, BN_HACK_FILE, log, phase, setPhase, setStep, isCommandHost } from 'bn-boot.js';
+import { BN_WEAKEN_FILE, BN_HACK_FILE, log, phase, setPhase, setStep, isCommandHost } from './bn-boot.js';
 
 export async function main(ns) {
   await phase(ns, 6, 'starting', async () => {

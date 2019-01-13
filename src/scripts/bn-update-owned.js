@@ -2,7 +2,7 @@
  * Creates a file with an entry for each owned host.
  */
 
-import { forEachHost } from 'lib-hosts.js';
+import { forEachHost } from './lib-hosts.js';
 
 export async function main(ns) {
   const ownedHostsFile = 'owned.txt';

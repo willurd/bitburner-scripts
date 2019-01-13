@@ -2,7 +2,7 @@
  * "ls" over all hosts in the network.
  */
 
-import { forEachHost } from 'lib-hosts';
+import { forEachHost } from './lib-hosts.js';
 
 export async function main(ns) {
   const [testString] = ns.args;

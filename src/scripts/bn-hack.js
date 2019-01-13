@@ -14,7 +14,7 @@ async function createApp(ns, host, maxMoneyPercent, minMoneyPercent) {
   const moneyWithPercentLabel = async () => `${await moneyLabel()} (${await currentMoneyPercentLabel()})`;
 
   async function print(...args) {
-    await ns.tprint(`[${host}] ${args.map((json) => JSON.stringify(json)).join(' ')}`);
+    await ns.print(`[${host}] ${args.map((json) => JSON.stringify(json)).join(' ')}`);
   }
 
   async function report() {

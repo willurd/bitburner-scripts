@@ -1,4 +1,4 @@
-import { phase } from 'bn-boot.js';
+import { phase } from './bn-boot.js';
 
 export async function main(ns) {
   await phase(ns, 2, 'setup', async () => {

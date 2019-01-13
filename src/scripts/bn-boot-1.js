@@ -1,5 +1,5 @@
-import { log, BN_FLAG_FILE, CNC_HOST, phase, setStep } from 'bn-boot.js';
-import { forEachHost } from 'lib-hosts.js';
+import { log, BN_FLAG_FILE, CNC_HOST, phase, setStep } from './bn-boot.js';
+import { forEachHost } from './lib-hosts.js';
 
 export async function main(ns) {
   await phase(ns, 1, 'prepare', async () => {

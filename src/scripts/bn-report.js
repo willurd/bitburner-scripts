@@ -3,8 +3,8 @@
  * you get what step of the owning they are in.
  */
 
-import { forEachHost } from 'lib-hosts.js';
-import { sendRequest } from 'api-utils.js';
+import { forEachHost } from './lib-hosts.js';
+import { sendRequest } from './api-utils.js';
 
 const BN_FLAG_FILE = 'bn-flag.txt';
 const BN_DB_FILE = 'bn-db.txt';

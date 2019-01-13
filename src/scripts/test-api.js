@@ -22,7 +22,7 @@
  *   }
  */
 
-import { sendRequest } from 'api-utils.js';
+import { sendRequest } from './api-utils.js';
 
 export async function main(ns) {
   let response;

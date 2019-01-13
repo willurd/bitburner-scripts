@@ -1,5 +1,5 @@
-import { cmd } from 'lib-inject.js';
-import { getHostPath } from 'lib-hosts.js';
+import { cmd } from './lib-inject.js';
+import { getHostPath } from './lib-hosts.js';
 
 export async function main(ns) {
   const [host] = ns.args;

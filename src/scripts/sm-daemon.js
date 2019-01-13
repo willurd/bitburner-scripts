@@ -28,8 +28,8 @@
  * TODO: Implement shorting stocks when available.
  */
 
-import { loadConfig, saveConfig, updaterScript, commission, buildStock, sellPositions } from 'sm-utils.js';
-import { formatMoney } from 'lib-money.js';
+import { loadConfig, saveConfig, updaterScript, commission, buildStock, sellPositions } from './sm-utils.js';
+import { formatMoney } from './lib-money.js';
 
 const canUseScript = (ns) => {
   const config = loadConfig(ns);
@@ -77,28 +77,28 @@ const tick = async (ns, state, config, iteration, isSimulated) => {
   if (goodStocks.length === 0) {
     // Nothing looks good. Just sell everything and wait.
     if (heldStocks.length > 0) {
-      ns.tprint(`There are no stocks worth holding. Selling all current positions.`);
+      ns.print(`There are no stocks worth holding. Selling all current positions.`);
       sellPositions(ns, heldStocks, isSimulated);
     } else if (isSimulated) {
-      ns.tprint(`There are no stocks worth holding. The best one was ${JSON.stringify(stocks[0])}`);
+      ns.print(`There are no stocks worth holding. The best one was ${JSON.stringify(stocks[0])}`);
     }
   } else {
-    // ns.tprint(`Stocks worth holding:`);
+    // ns.print(`Stocks worth holding:`);
     // for (const { symbol, price, position, volatility, forecast } of goodStocks) {
-    //   ns.tprint(`${symbol} - price=${price}, position=${position}, volatility=${volatility}, forecast=${forecast}`);
+    //   ns.print(`${symbol} - price=${price}, position=${position}, volatility=${volatility}, forecast=${forecast}`);
     // }
 
     const bestStock = goodStocks[0];
 
     if (isSimulated) {
-      ns.tprint(`The best stock is currently: ${JSON.stringify(bestStock)}`);
+      ns.print(`The best stock is currently: ${JSON.stringify(bestStock)}`);
     }
 
     const otherHeldStocks = heldStocks.filter((stock) => stock.symbol !== bestStock.symbol);
     if (otherHeldStocks.length > 0) {
       // Don't sell the best stock if we already own some. No need to incur the
       // commission on the sale because we're just going to buy it right back again.
-      ns.tprint(`Selling all stocks that aren't the current best`);
+      ns.print(`Selling all stocks that aren't the current best`);
       sellPositions(ns, otherHeldStocks, isSimulated);
     }
 
@@ -112,7 +112,7 @@ const tick = async (ns, state, config, iteration, isSimulated) => {
 
     if (availableMoney <= 0) {
       if (!isStockHeld(bestStock)) {
-        ns.tprint(
+        ns.print(
           `You only have ${formatMoney(currentMoney)}, less than the configured minimum cash on hand of ${formatMoney(
             minimumCashOnHand,
           )}`,
@@ -123,7 +123,7 @@ const tick = async (ns, state, config, iteration, isSimulated) => {
 
       if (shares > 0) {
         if (isSimulated) {
-          ns.tprint(
+          ns.print(
             `You have ${formatMoney(availableMoney)} to play with (${((availableMoney / totalMoney) * 100).toFixed(
               2,
             )}% of your total cash). Spending it all on ${bestStock.symbol}.`,
@@ -135,7 +135,7 @@ const tick = async (ns, state, config, iteration, isSimulated) => {
         if (!isStockHeld(bestStock) || sharesCost >= commission.total * 100) {
           // Don't waste commission money buying stocks worth less than the commission.
           const totalCost = sharesCost + commission.buy;
-          ns.tprint(
+          ns.print(
             `Purchasing ${shares} shares${isStockHeld(bestStock) ? ' more' : ''} of ${
               bestStock.symbol
             } at a total of ${formatMoney(totalCost)}.`,
@@ -166,7 +166,7 @@ export async function main(ns) {
 
   while (true && iteration < maxIterations) {
     iteration += 1;
-    // ns.tprint(`Iteration ${iteration}`);
+    // ns.print(`Iteration ${iteration}`);
     const config = loadConfig(ns);
     await tick(ns, state, config, iteration, isSimulated);
     await ns.sleep(config.tickTime);
@@ -180,5 +180,5 @@ export async function main(ns) {
     sellPositions(ns, heldStocks, isSimulated);
   }
 
-  ns.tprint('Exiting sm-daemon');
+  ns.tprint('Exiting sm-daemon.js');
 }

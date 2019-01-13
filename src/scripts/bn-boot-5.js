@@ -1,4 +1,4 @@
-import { WAIT_MS, phase, setStep, isCommandHost } from 'bn-boot.js';
+import { WAIT_MS, phase, setStep, isCommandHost } from './bn-boot.js';
 
 export async function main(ns) {
   await phase(ns, 5, 'hacking', async () => {

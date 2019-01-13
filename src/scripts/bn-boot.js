@@ -1,5 +1,5 @@
-import { setDbKeys } from 'bn-utils.js';
-import { forEachHost } from 'lib-hosts.js';
+import { setDbKeys, updateDb } from './bn-utils.js';
+import { forEachHost } from './lib-hosts.js';
 
 /**
  * TODO: This is pretty much an FSM. Write some nice utilities for FSMs.
@@ -53,7 +53,21 @@ export const BOOT_SCRIPT_GRAPH = {
 
 export const log = (ns, message) => {
   const thisHost = ns.getHostname();
-  ns.tprint(`[bn:${thisHost}] ${message}`);
+  const fullMessage = `[bn:${thisHost}] ${message}`;
+  ns.tprint(fullMessage);
+  addToLog(ns, fullMessage);
+};
+
+export const clearLog = (ns) => {
+  return setDbKeys(ns, { log: [] });
+};
+
+export const addToLog = (ns, message) => {
+  return updateDb(ns, (db) => {
+    const log = (db.log || []).slice();
+    log.push(message);
+    return Object.assign({}, db, { log });
+  });
 };
 
 export const isCommandHost = (ns) => {
@@ -66,12 +80,12 @@ export const getAdjacentHosts = (ns) => {
 };
 
 export const setPhase = (ns, number, name) => {
-  setDbKeys(ns, { phase: `${number} (${name})` });
+  return setDbKeys(ns, { phase: `${number} (${name})` });
 };
 
 export const setStep = (ns, step, data = {}) => {
   log(ns, `Step: ${step}, ${JSON.stringify(data)}`);
-  setDbKeys(ns, {
+  return setDbKeys(ns, {
     step,
     stepData: data,
   });
@@ -79,6 +93,10 @@ export const setStep = (ns, step, data = {}) => {
 
 export const setPropagatedTo = (ns, propagatedTo) => {
   return setDbKeys(ns, { propagatedTo });
+};
+
+export const setOwned = (ns, owned) => {
+  return setDbKeys(ns, { owned });
 };
 
 export const phase = async (ns, number, name, fn) => {
@@ -106,6 +124,7 @@ export async function main(ns) {
       ns.tprint(`${script} => ${ns.getScriptRam(script)}`);
     }
   } else {
+    clearLog(ns);
     log(ns, 'Initiating botnet boot sequence');
     nextBootPhase(ns);
   }

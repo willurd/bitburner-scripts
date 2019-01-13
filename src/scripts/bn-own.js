@@ -2,7 +2,7 @@
  * Owns the given host if possible.
  */
 
-import { hacks } from 'constants.js';
+import { hacks } from './constants.js';
 
 export async function main(ns) {
   const [host] = ns.args;

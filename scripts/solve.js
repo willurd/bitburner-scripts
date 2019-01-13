@@ -5,6 +5,7 @@ const largestPrimeFactor = require('../src/contract-solvers/largestPrimeFactor')
 const numberOfWaysToWriteAsSum = require('../src/contract-solvers/numberOfWaysToWriteAsSum').default;
 const { default: spiralOrderMatrix, mtx } = require('../src/contract-solvers/spiralOrderMatrix');
 const canJumpToLastIndex = require('../src/contract-solvers/canJumpToLastIndex').default;
+const mergeOverlappingIntervals = require('../src/contract-solvers/mergeOverlappingIntervals').default;
 
 const solvers = [
   {
@@ -42,6 +43,14 @@ const solvers = [
       const nums = numsString.split(',').map(Number);
       const result = canJumpToLastIndex(nums);
       console.log(result);
+    },
+  },
+  {
+    name: 'mergeOverlappingIntervals',
+    solve: (intervalsString) => {
+      const intervals = JSON.parse(intervalsString);
+      const result = mergeOverlappingIntervals(intervals);
+      console.log(JSON.stringify(result));
     },
   },
 ];
