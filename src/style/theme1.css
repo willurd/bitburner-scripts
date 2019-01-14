@@ -1,0 +1,93 @@
+html>body {
+  font-family: Consolas !important;
+  --my-highlight-color: #ffffff !important;
+  --my-font-color: #a5e868 !important;
+  --my-background-color: #000000 !important;
+  --my-prompt-color: #f92672 !important;
+}
+
+#mainmenu-container {}
+
+#mainmenu {
+  background-color: #0a0a0a;
+  /*border-right: 1px solid #222;*/
+  border: none;
+}
+
+#mainmenu>li {}
+
+#mainmenu>li .mainmenu-accordion-header,
+#mainmenu>li .mainmenu-accordion-header-compact {
+  background-color: #333;
+  outline: none !important;
+}
+
+#mainmenu>li .mainmenu-accordion-header.opened {
+  background-color: black !important;
+}
+
+#mainmenu>li .mainmenu-accordion-header:hover:not(.opened) {
+  background-color: #555 !important;
+}
+
+#mainmenu>li.mainmenu-accordion-panel {}
+
+#mainmenu>li.mainmenu-accordion-panel button {
+  background-color: #1f1f1f;
+}
+
+#mainmenu>li.mainmenu-accordion-panel button.active {
+  background-color: #2f2f2f;
+  color: #abc123;
+}
+
+#mainmenu>li.mainmenu-accordion-panel button:hover:not(.active) {
+  background-color: #2f2f2f;
+}
+
+#character-overview-wrapper {}
+
+#character-overview-container {
+  background-color: #111;
+  border: 1px solid #777;
+  border-radius: 5px;
+  margin: 10px 10px 0 0;
+  max-width: 300px;
+  padding: 10px;
+}
+
+#character-overview-text {}
+
+#character-overview-container .character-quick-options {}
+
+#character-overview-container .character-quick-options button {
+  border: 1px solid #777;
+  font-weight: normal;
+  height: 30px;
+}
+
+#character-overview-save-button {}
+
+#character-overview-options-button {}
+
+#character-overview-text table {}
+
+#character-overview-text table .character-stat-cell {}
+
+#character-overview-text table #character-hp-wrapper {}
+
+#character-overview-text table #character-money-wrapper {}
+
+#character-overview-text table #character-hack-wrapper {}
+
+#character-overview-text table #character-str-wrapper {}
+
+#character-overview-text table #character-def-wrapper {}
+
+#character-overview-text table #character-dex-wrapper {}
+
+#character-overview-text table #character-agi-wrapper {}
+
+#character-overview-text table #character-cha-wrapper {}
+
+#character-overview-text table #character-int-wrapper {}

@@ -19,17 +19,25 @@ export async function main(ns) {
 
   if (openPorts < requiredOpenPorts) {
     return ns.tprint(
-      `Unable to open the ${requiredOpenPorts} ports required for owning. Could only open ${openPorts}.`,
+      `${host}: Unable to open the ${requiredOpenPorts} ports required for owning. Could only open ${openPorts}.`,
     );
   }
 
   for (const { portName, command } of availableHacks) {
     command(ns, host);
-    ns.tprint(`Opened up the ${portName} port.`);
+    ns.tprint(`${host}: Opened up the ${portName} port.`);
     await ns.sleep(20);
   }
 
   ns.nuke(host);
-  ns.tprint(`pwned!`);
+  ns.tprint(`${host}: pwned!`);
+
+  ns.tprint(`${host}: hacking...`);
+  while ((await ns.hack(host)) === 0) {
+    ns.tprint(`${host}: hack failed`);
+    ns.sleep(50);
+  }
+  ns.tprint(`${host}: hacked!`);
+
   ns.write('owned.txt', `${host}\n`, 'a');
 }

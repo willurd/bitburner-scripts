@@ -6,6 +6,7 @@ const numberOfWaysToWriteAsSum = require('../src/contract-solvers/numberOfWaysTo
 const { default: spiralOrderMatrix, mtx } = require('../src/contract-solvers/spiralOrderMatrix');
 const canJumpToLastIndex = require('../src/contract-solvers/canJumpToLastIndex').default;
 const mergeOverlappingIntervals = require('../src/contract-solvers/mergeOverlappingIntervals').default;
+const stockMarketProfit = require('../src/contract-solvers/stockMarketProfit').default;
 
 const solvers = [
   {
@@ -51,6 +52,15 @@ const solvers = [
       const intervals = JSON.parse(intervalsString);
       const result = mergeOverlappingIntervals(intervals);
       console.log(JSON.stringify(result));
+    },
+  },
+  {
+    name: 'stockMarketProfit',
+    solve: (numsString, maxTransactionsString) => {
+      const nums = numsString.split(',').map(Number);
+      const maxTransactions = maxTransactionsString && parseInt(maxTransactionsString, 10);
+      const result = stockMarketProfit(nums, maxTransactions);
+      console.log(result);
     },
   },
 ];
