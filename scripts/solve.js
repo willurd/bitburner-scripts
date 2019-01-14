@@ -7,6 +7,7 @@ const { default: spiralOrderMatrix, mtx } = require('../src/contract-solvers/spi
 const canJumpToLastIndex = require('../src/contract-solvers/canJumpToLastIndex').default;
 const mergeOverlappingIntervals = require('../src/contract-solvers/mergeOverlappingIntervals').default;
 const stockMarketProfit = require('../src/contract-solvers/stockMarketProfit').default;
+const largestSubArraySum = require('../src/contract-solvers/largestSubArraySum').default;
 
 const solvers = [
   {
@@ -60,6 +61,14 @@ const solvers = [
       const nums = numsString.split(',').map(Number);
       const maxTransactions = maxTransactionsString && parseInt(maxTransactionsString, 10);
       const result = stockMarketProfit(nums, maxTransactions);
+      console.log(result);
+    },
+  },
+  {
+    name: 'largestSubArraySum',
+    solve: (numsString) => {
+      const nums = numsString.split(',').map(Number);
+      const result = largestSubArraySum(nums);
       console.log(result);
     },
   },

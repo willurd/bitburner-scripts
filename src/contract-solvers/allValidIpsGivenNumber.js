@@ -1,8 +1,10 @@
+// This function is pretty ugly. I wonder if there's a nicer way
+// to do this.
 export default function allValidIpsGivenNumber(num, size = 4) {
   if (size <= 0) {
     return [];
   } else if (size === 1) {
-    if (parseInt(num, 10) <= 255) {
+    if (num.length <= 3 && parseInt(num, 10) <= 255) {
       return [num];
     } else {
       return [];
@@ -21,7 +23,7 @@ export default function allValidIpsGivenNumber(num, size = 4) {
       continue;
     }
 
-    if (parseInt(segment, 10) <= 255) {
+    if (segment.length <= 3 && parseInt(segment, 10) <= 255) {
       ips = ips.concat(allValidIpsGivenNumber(num.slice(i + 1), size - 1).map((ip) => `${segment}.${ip}`));
     }
   }

@@ -49,7 +49,7 @@ export const forEachOwnedHost = async (ns, fn, sleepMs = 5) => {
   );
 };
 
-export const getHostPath = async (ns, host) => {
+export const getHostPath = async (ns, searchHost) => {
   let hostPath;
 
   await forEachHost(ns, async (host, path, adjacent) => {

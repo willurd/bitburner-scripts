@@ -14,6 +14,7 @@ export async function main(ns) {
     return ns.tprint(`Could not find the path to host "${host}"`);
   }
 
+  path.shift();
   const command = `home; ${path.map((p) => `connect ${p}`).join('; ')};`;
   cmd(ns, command);
 }
