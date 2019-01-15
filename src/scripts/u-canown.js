@@ -11,9 +11,7 @@ export async function main(ns) {
   let ownableHostCount = 0;
 
   await forEachHost(ns, async (host, path, adjacent) => {
-    const isOwned = ns.hasRootAccess(host);
-
-    if (isOwned) {
+    if (ns.hasRootAccess(host)) {
       return;
     }
 
