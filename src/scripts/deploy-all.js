@@ -13,6 +13,7 @@ const SCRIPTS = [
   'bn-getmoney.js',
   'bn-hack.js',
   'bn-own.js',
+  'bn-propagate.js',
   'bn-report.js',
   'bn-update-owned.js',
   'bn-utils.js',
@@ -26,6 +27,7 @@ const SCRIPTS = [
   'lib-inject.js',
   'lib-money.js',
   'sm-daemon.js',
+  'sm-simulation-data-daemon.js',
   'sm-deploy.js',
   'sm-update-config.js',
   'sm-utils.js',
@@ -38,15 +40,23 @@ const SCRIPTS = [
   'u-report-money.js',
 ];
 
+const EMPTY_SCRIPT = 'empty.js';
+
 const joinPath = (...parts) => parts.join('/');
 
 // TODO: Abstract out the downloading of a list of scripts.
 export async function main(ns) {
-  const scriptServer = ns.args[0] || 'http://localhost:8080';
+  const deployEmptyScripts = (ns.args[0] || 0) === 1;
+  const scriptServer = ns.args[1] || 'http://localhost:8080';
   const scriptRoot = 'scripts';
 
+  if (deployEmptyScripts) {
+    ns.tprint('DEPLOYING EMPTY SCRIPTS');
+  }
+
   for (const script of SCRIPTS) {
-    const url = joinPath(scriptServer, scriptRoot, script);
+    const actualScript = script === 'deploy-all.js' ? script : deployEmptyScripts ? EMPTY_SCRIPT : script;
+    const url = joinPath(scriptServer, scriptRoot, actualScript);
 
     ns.tprint(`Downloading ${script}`);
     const success = await ns.wget(url, script);

@@ -17,6 +17,7 @@ const SCRIPTS = [
   'bn-getmoney.js',
   'bn-hack.js',
   'bn-own.js',
+  'bn-propagate.js',
   'bn-report.js',
   'bn-update-owned.js',
   'bn-weaken.js',

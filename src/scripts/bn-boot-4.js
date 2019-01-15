@@ -19,11 +19,11 @@ export async function main(ns) {
       setStep(ns, 'killing all remote processes', { i, host });
       await ns.killall(host);
 
-      const files = ns.ls(host);
-      setStep(ns, 'removing all remote files', { i, host, files });
-      for (const file of files) {
-        await ns.rm(file, host);
-      }
+      // const files = ns.ls(host);
+      // setStep(ns, 'removing all remote files', { i, host, files });
+      // for (const file of files) {
+      //   await ns.rm(file, host);
+      // }
 
       setStep(ns, `propagating botnet files`, { i, host });
       for (const bnFile of BN_FILES) {

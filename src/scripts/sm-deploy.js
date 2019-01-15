@@ -3,6 +3,7 @@ const SCRIPTS = [
   'sm-utils.js',
   'sm-update-config.js',
   'sm-daemon.js',
+  'sm-simulation-data-daemon.js',
   'sm-deploy.js',
 ];
 

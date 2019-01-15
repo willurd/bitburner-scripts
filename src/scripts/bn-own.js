@@ -32,12 +32,12 @@ export async function main(ns) {
   ns.nuke(host);
   ns.tprint(`${host}: pwned!`);
 
-  ns.tprint(`${host}: hacking...`);
-  while ((await ns.hack(host)) === 0) {
-    ns.tprint(`${host}: hack failed`);
-    ns.sleep(50);
-  }
-  ns.tprint(`${host}: hacked!`);
+  // ns.tprint(`${host}: hacking...`);
+  // while ((await ns.hack(host)) === 0) {
+  //   ns.tprint(`${host}: hack failed`);
+  //   ns.sleep(50);
+  // }
+  // ns.tprint(`${host}: hacked!`);
 
-  ns.write('owned.txt', `${host}\n`, 'a');
+  // ns.write('owned.txt', `${host}\n`, 'a');
 }
