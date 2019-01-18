@@ -139,6 +139,36 @@ app.get('/simulation/tick', (req, res) => {
   return res.json({ ok: true });
 });
 
+const t = (time) =>
+  new Date(time)
+    .toISOString()
+    .replace(/\.\d{3}Z$/, '')
+    .split('T')
+    .join(' ');
+
+app.get('/simulation/state', (req, res) => {
+  const { stocks } = JSON.parse(req.query.data);
+
+  if (!simulationExists()) {
+    return res.json({ ignored: true });
+  }
+
+  const { symbols, names, ticks } = _simulation;
+
+  return res.json({
+    ok: true,
+    simulation: {
+      symbols,
+      names,
+      ticks: {
+        start: t(ticks[0].time),
+        end: t(ticks[ticks.length - 1].time),
+        count: ticks.length,
+      },
+    },
+  });
+});
+
 app.get('/simulation/done', (req, res) => {
   if (!finishSimulation()) {
     return res.json({ ignored: true });
