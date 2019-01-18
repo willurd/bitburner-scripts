@@ -8,7 +8,8 @@
     "test": "cross-env NODE_ENV=test jest",
     "solve": "node ./scripts/solve.js",
     "script-server": "cd src && http-server --cors",
-    "tix-api-server": "nodemon ./scripts/tix-api-server.js"
+    "tix-api-server": "node ./scripts/tix-api-server.js",
+    "tix-validate": "node ./scripts/tix-validate.js"
   },
   "dependencies": {
     "@babel/core": "^7.2.2",

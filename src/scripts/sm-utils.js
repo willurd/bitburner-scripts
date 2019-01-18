@@ -7,8 +7,8 @@ commission.total = commission.buy + commission.sell;
 
 export const configDefaults = {
   tickTime: 3000,
-  minimumCashOnHand: 1e9, // 1 billion
-  minimumCashPercent: 0.95, // 10 percent
+  minimumCashOnHand: 2e7, // 20 million
+  minimumCashPercent: 0.05, // 5 percent
   purchase4SMarketData: false,
   purchase4SMarketDataTixApi: false,
   symbols: null,
