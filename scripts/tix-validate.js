@@ -4,22 +4,24 @@ const path = require('path');
 const getSimulations = () => {
   const simulationsDirectory = path.join(__dirname, '../data/tix-simulations');
   const files = fs.readdirSync(simulationsDirectory);
-  const simulations = files.map((fileName) => {
-    const fullPath = path.join(simulationsDirectory, fileName);
-    const content = fs.readFileSync(path.join(__dirname, '../data/tix-simulations', fileName));
-    const json = JSON.parse(content);
+  const simulations = files
+    .filter((fileName) => fileName.endsWith('.json'))
+    .map((fileName) => {
+      const fullPath = path.join(simulationsDirectory, fileName);
+      const content = fs.readFileSync(path.join(__dirname, '../data/tix-simulations', fileName));
+      const json = JSON.parse(content);
 
-    return {
-      fileName,
-      symbols: json.symbols,
-      names: json.names,
-      ticks: {
-        count: json.ticks.length,
-        first: json.ticks[0],
-        last: json.ticks[json.ticks.length - 1],
-      },
-    };
-  });
+      return {
+        fileName,
+        symbols: json.symbols,
+        names: json.names,
+        ticks: {
+          count: json.ticks.length,
+          first: json.ticks[0],
+          last: json.ticks[json.ticks.length - 1],
+        },
+      };
+    });
 
   // Sort by time, descending. This assumes there are no overlapping
   // simulations, which shouldn't be possible as long as only one
@@ -88,8 +90,8 @@ const main = () => {
 
   for (const group of simulationGroups) {
     console.log(`Group of contiguous simulations:`);
-    console.log(`  Start Time: ${t(group.start)} simulations`);
-    console.log(`    End Time: ${t(group.end)} simulations`);
+    console.log(`  Start Time: ${t(group.start)}`);
+    console.log(`    End Time: ${t(group.end)}`);
     console.log(`  Simulations: ${group.simulations.length} simulations`);
 
     for (const simulation of group.simulations) {
