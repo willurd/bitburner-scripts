@@ -3,7 +3,7 @@
 This folder contains sets of actual Bitburner Stock Market data, 1 hour's
 worth of data in each file, pulled off the game using `wget` requests,
 passing the data as query string parameters to `/scripts/tix-api-server.js`.
-You can use this data optimize your own stock market trading algorithms.
+You can use this data to optimize your own stock market trading algorithms.
 Ticks are roughly 4 seconds apart.
 
 ## Format
