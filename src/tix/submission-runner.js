@@ -17,6 +17,7 @@ const scenarios = {
 
 const createNs = (game) => {
   const symbols = game.dataset.symbols;
+  const has4sApi = game.scenario.has4sApi;
   let cash = game.scenario.cash;
 
   // gameState.currentTick
@@ -30,6 +31,8 @@ const createNs = (game) => {
     // getStockPosition(sym) => [Shares, AvgPrice, SharesShort, AvgPriceShort]` -
     // buyStock(sym, shares) => Price | 0` -
     // sellStock(sym, shares) => Price | 0` -
+
+    // TODO:
     // shortStock(sym, shares) => Price | 0` -
     // sellShort(sym, shares) => Price | 0` -
     // placeOrder(sym, shares, price, type, pos) => boolean` -
@@ -37,8 +40,6 @@ const createNs = (game) => {
     // getOrders() => { [Symbol]: Order }` -
     // getStockVolatility(sym) => number` -
     // getStockForecast(sym) => number` -
-    // purchase4SMarketData() => boolean` -
-    // purchase4SMarketDataTixApi() => boolean`;
 
     getServerMoneyAvailable: (server) => {
       if (server !== 'home') {
@@ -47,6 +48,9 @@ const createNs = (game) => {
 
       return cash;
     },
+
+    purchase4SMarketData: () => has4sApi,
+    purchase4SMarketDataTixApi: () => has4sApi,
   };
 };
 
@@ -60,12 +64,24 @@ const compileReport = (ns, game) => {
 
 const runGame = async (game) => {
   const ns = createNs(game);
+  const submissionLocalState = game.state.submissionLocalState;
   // const totalTicks = game.dataset.ticks.length;
   const totalTicks = 10;
 
+  // Call the submission's `setup` function if it has one.
+  if (game.submission.setup) {
+    await game.submission.setup(ns, submissionLocalState);
+  }
+
+  // Call the submission's `tick` function on every tick in the dataset.
   while (game.state.currentTick < totalTicks) {
-    await game.submissionTickFunction(ns, game.state.submissionLocalState);
+    await game.submission.tick(ns, submissionLocalState);
     game.state.currentTick += 1;
+  }
+
+  // Call the submission's `done` function if it has one.
+  if (game.submission.done) {
+    await game.submission.done(ns, submissionLocalState);
   }
 
   return compileReport(ns, game);
@@ -80,11 +96,9 @@ const loadSubmission = (fileName) => {
   const transpiled = transform.code;
   const context = {
     exports: {},
-    window: {},
-    global: {},
   };
-  context.window.exports = context.exports;
-  context.global.exports = context.exports;
+  context.window = context;
+  context.global = context;
 
   function evalInContext() {
     with (context) {
@@ -98,7 +112,11 @@ const loadSubmission = (fileName) => {
     throw new Error('Submission does not export a `tick` function');
   }
 
-  return context.exports.tick;
+  return {
+    setup: context.exports.setup,
+    tick: context.exports.tick,
+    done: context.exports.done,
+  };
 };
 
 const loadDataset = (fileName) => {
@@ -120,7 +138,7 @@ const main = () => {
       ...scenario,
     },
     dataset: loadDataset(dataset),
-    submissionTickFunction: loadSubmission(submission),
+    submission: loadSubmission(submission),
     state: {
       currentTick: 0,
       // This is state a submission can use to store data between calls.
