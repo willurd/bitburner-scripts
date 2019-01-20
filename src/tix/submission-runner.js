@@ -21,26 +21,28 @@ const createNs = (game) => {
   const has4sApi = game.scenario.has4sApi;
   let cash = game.scenario.cash;
 
-  // gameState.currentTick
+  const getTick = () => game.dataset.ticks[game.state.currentTick];
+  const getStock = (symbol) => getTick().stocks[symbol];
 
   return {
     print: (message) => console.log(String(message)),
     tprint: (message) => console.log(String(message)),
     getStockSymbols: () => symbols,
+    getStockPrice: (symbol) => getStock(symbol)[0],
+    getStockVolatility: (symbol) => getStock(symbol)[1],
+    getStockForecast: (symbol) => getStock(symbol)[2],
 
-    // getStockPrice(sym) => number` -
+    // TODO once I get the time
     // getStockPosition(sym) => [Shares, AvgPrice, SharesShort, AvgPriceShort]` -
     // buyStock(sym, shares) => Price | 0` -
     // sellStock(sym, shares) => Price | 0` -
 
-    // TODO:
+    // TODO once I understand how this stuff works
     // shortStock(sym, shares) => Price | 0` -
     // sellShort(sym, shares) => Price | 0` -
     // placeOrder(sym, shares, price, type, pos) => boolean` -
     // cancelOrder(sym, shares, price, type, pos) => void` -
     // getOrders() => { [Symbol]: Order }` -
-    // getStockVolatility(sym) => number` -
-    // getStockForecast(sym) => number` -
 
     getServerMoneyAvailable: (server) => {
       if (server !== 'home') {
@@ -67,7 +69,7 @@ const runGame = async (game) => {
   const ns = createNs(game);
   const submissionLocalState = game.state.submissionLocalState;
   // const totalTicks = game.dataset.ticks.length;
-  const totalTicks = 10;
+  const totalTicks = 3;
 
   // Call the submission's `setup` function if it has one.
   if (game.submission.setup) {
