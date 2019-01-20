@@ -15,15 +15,16 @@ const scenarios = {
   },
 };
 
-const createNs = (scenario, dataset, gameState) => {
-  let cash = scenario.cash;
+const createNs = (game) => {
+  const symbols = game.dataset.symbols;
+  let cash = game.scenario.cash;
 
   // gameState.currentTick
 
   return {
     print: (message) => console.log(String(message)),
     tprint: (message) => console.log(String(message)),
-    getStockSymbols: () => dataset.symbols,
+    getStockSymbols: () => symbols,
 
     // getStockPrice(sym) => number` -
     // getStockPosition(sym) => [Shares, AvgPrice, SharesShort, AvgPriceShort]` -
@@ -43,23 +44,31 @@ const createNs = (scenario, dataset, gameState) => {
       if (server !== 'home') {
         throw new Error('submission-runner can only return the money available for "home"');
       }
+
       return cash;
     },
   };
 };
 
+const compileReport = (ns, game) => {
+  return {
+    // The final amount of cash after running the submission.
+    cash: ns.getServerMoneyAvailable('home'),
+    ticks: game.state.currentTick,
+  };
+};
+
 const runGame = async (game) => {
   const ns = createNs(game);
+  // const totalTicks = game.dataset.ticks.length;
+  const totalTicks = 10;
 
-  console.log({
-    scenario: game.scenario,
-    dataset: {
-      // symbols: game.dataset.symbols,
-      ticks: game.dataset.ticks.length,
-    },
-    submissionTickFunction: game.submissionTickFunction,
-    state: game.state,
-  });
+  while (game.state.currentTick < totalTicks) {
+    await game.submissionTickFunction(ns, game.state.submissionLocalState);
+    game.state.currentTick += 1;
+  }
+
+  return compileReport(ns, game);
 };
 
 const loadSubmission = (fileName) => {
@@ -98,22 +107,32 @@ const loadDataset = (fileName) => {
   return JSON.parse(content);
 };
 
+const dataset = '7570ee52-d5a4-4466-9440-fd76ef222872.json';
+const submission = 'willurd.js';
+const scenario = scenarios.early.new;
+
 const main = () => {
   const game = {
     scenario: {
       has4sApi: false,
       shorting: false,
       limitStop: false,
-      ...scenarios.early.new,
+      ...scenario,
     },
-    dataset: loadDataset('7570ee52-d5a4-4466-9440-fd76ef222872.json'),
-    submissionTickFunction: loadSubmission('willurd.js'),
+    dataset: loadDataset(dataset),
+    submissionTickFunction: loadSubmission(submission),
     state: {
       currentTick: 0,
+      // This is state a submission can use to store data between calls.
+      submissionLocalState: {},
     },
   };
 
-  runGame(game).catch((e) => console.log(e));
+  runGame(game)
+    .then((report) => {
+      console.log(`\$${report.cash} cash on hand after ${report.ticks} ticks`);
+    })
+    .catch((e) => console.log(e));
 };
 
 main();
