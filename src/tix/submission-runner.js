@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const babel = require('@babel/core');
+const safeEval = require('safe-eval');
 
 const scenarios = {
   early: {
@@ -94,19 +95,23 @@ const loadSubmission = (fileName) => {
     plugins: ['transform-es2015-modules-commonjs'],
   });
   const transpiled = transform.code;
+  const useInstead = (from, to) => {
+    return () => console.log(`Please use ${to} instead of ${from}`);
+  };
   const context = {
     exports: {},
+    console: {
+      log: useInstead('console.log', 'ns.tprint'),
+      error: useInstead('console.error', 'ns.tprint'),
+      info: useInstead('console.info', 'ns.tprint'),
+      dir: useInstead('console.dir', 'ns.tprint'),
+      table: useInstead('console.table', 'ns.tprint'),
+      trace: useInstead('console.trace', 'ns.tprint'),
+      warn: useInstead('console.warn', 'ns.tprint'),
+    },
   };
-  context.window = context;
-  context.global = context;
 
-  function evalInContext() {
-    with (context) {
-      eval(transpiled);
-    }
-  }
-
-  evalInContext.call(context);
+  safeEval(transpiled, context);
 
   if (typeof context.exports.tick !== 'function') {
     throw new Error('Submission does not export a `tick` function');

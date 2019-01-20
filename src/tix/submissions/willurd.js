@@ -1,5 +1,3 @@
-console.log(require('fs'));
-
 export async function setup(ns, state) {
   state.symbols = ns.getStockSymbols();
   state.has4sApi = ns.purchase4SMarketDataTixApi();
