@@ -51,8 +51,11 @@ export const sellPositions = (ns, stocks, isSimulated) => {
     position: [shares, averageBuyPrice],
   } of stocks) {
     if (shares > 0) {
-      const ret = (price - averageBuyPrice) * shares - commission.total;
-      ns.tprint(`Selling ${shares} shares of ${symbol} at ${formatMoney(price)}, for a return of ${formatMoney(ret)}`);
+      const totalPriceChange = (price - averageBuyPrice) * shares;
+      const returnValue = totalPriceChange - commission.total;
+      ns.print(
+        `Selling ${shares} shares of ${symbol} at ${formatMoney(price)}, for a return of ${formatMoney(returnValue)}`,
+      );
 
       if (!isSimulated) {
         ns.stock.sell(symbol, shares);

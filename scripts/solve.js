@@ -78,11 +78,11 @@ const getSolverByName = (name) => {
   const nameRegex = new RegExp(name, 'i');
   const args = process.argv.slice(3);
   return solvers.find(({ name }) => nameRegex.test(name));
-}
+};
 
 const getSolverNames = () => {
-  return solvers.map(solver => solver.name);
-}
+  return solvers.map((solver) => solver.name);
+};
 
 const usage = () => {
   console.log('yarn solve {problem} [...args]');
@@ -90,7 +90,7 @@ const usage = () => {
 };
 
 const main = () => {
-  const problem = process.argv[2];
+  const [problem, ...args] = process.argv.slice(2);
 
   if (!problem?.trim()) {
     console.error('Please provide a problem to solve. Choose one of:');

@@ -1,15 +1,17 @@
-// https://www.reddit.com/r/Bitburner/comments/a8ih3j/script_to_manually_hack_servers_to_get_faction/
-export function inject(ns, code) {
-  let id = '' + Math.random() + Math.random();
-  let output = `<style onload="${code} document.getElementById('${id}').remove();"`;
-  output += ` id="${id}" ></style>`;
-  ns.tprint(output);
-}
-
-// https://www.reddit.com/r/Bitburner/comments/a8ih3j/script_to_manually_hack_servers_to_get_faction/
+// https://bitburner.readthedocs.io/en/latest/netscript/advancedfunctions/inject_html.html
 export function cmd(ns, cmd) {
-  let code = `document.getElementById('terminal-input-text-box').value = '${cmd}';`;
-  code += "document.body.dispatchEvent(new KeyboardEvent('keydown', {";
-  code += 'bubbles: true, cancelable: true, keyCode: 13 }));';
-  inject(ns, code);
+  // Acquire a reference to the terminal text field
+  const terminalInput = document.getElementById('terminal-input');
+
+  // Set the value to the command you want to run.
+  terminalInput.value = cmd;
+
+  // Get a reference to the React event handler.
+  const handler = Object.keys(terminalInput)[1];
+
+  // Perform an onChange event to set some internal values.
+  terminalInput[handler].onChange({ target: terminalInput });
+
+  // Simulate an enter press
+  terminalInput[handler].onKeyDown({ keyCode: 13, preventDefault: () => null });
 }

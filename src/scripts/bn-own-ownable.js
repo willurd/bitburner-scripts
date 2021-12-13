@@ -143,7 +143,7 @@ export const formatMoney = (money) => {
   return '$' + money.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 };
 
-const BN_OWN_SCRIPT = 'bn-own-2.js';
+const BN_OWN_SCRIPT = 'bn-own.js';
 const BN_PROPAGATE_SCRIPT = 'bn-propagate.js';
 
 export async function main(ns) {
