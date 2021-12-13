@@ -58,6 +58,8 @@ export async function main(ns) {
     const actualScript = script === 'deploy-all.js' ? script : deployEmptyScripts ? EMPTY_SCRIPT : script;
     const url = joinPath(scriptServer, scriptRoot, actualScript);
 
+    await ns.rm(script);
+
     ns.tprint(`Downloading ${script}`);
     const success = await ns.wget(url, script);
 

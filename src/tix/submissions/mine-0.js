@@ -1,10 +1,10 @@
 export async function setup(ns, state) {
-  state.symbols = ns.getStockSymbols();
-  state.has4sApi = ns.purchase4SMarketDataTixApi();
+  state.symbols = ns.stock.getSymbols();
+  state.has4sApi = ns.stock.purchase4SMarketDataTixApi();
 }
 
 export async function tick(ns, state) {
-  ns.buyStock(state.symbols[0], 1);
+  ns.stock.buy(state.symbols[0], 1);
 }
 
 export async function done(ns, state) {

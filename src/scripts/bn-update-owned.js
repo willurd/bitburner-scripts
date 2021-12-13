@@ -10,12 +10,12 @@ export async function main(ns) {
 
   // TODO: Use `forEachOwnedHost`.
   await forEachHost(ns, async (host, path, adjacent) => {
-    if (ns.hasRootAccess(host)) {
+    if (await ns.hasRootAccess(host)) {
       owned.push(host);
     }
   });
 
-  ns.clear(ownedHostsFile);
-  ns.write(ownedHostsFile, owned.join('\n'));
-  ns.tprint(`${ownedHostsFile} updated`);
+  await ns.clear(ownedHostsFile);
+  await ns.write(ownedHostsFile, owned.join('\n'));
+  await ns.tprint(`${ownedHostsFile} updated`);
 }

@@ -13,9 +13,9 @@ const BN_HACK_SCRIPT = 'bn-hack.js';
 const printHostReport = async (ns, host) => {
   if (
     host === 'home' ||
-    !ns.hasRootAccess(host) ||
-    !ns.fileExists(BN_FLAG_FILE, host) ||
-    !ns.fileExists(BN_DB_FILE, host)
+    !(await ns.hasRootAccess(host)) ||
+    !(await ns.fileExists(BN_FLAG_FILE, host)) ||
+    !(await ns.fileExists(BN_DB_FILE, host))
   ) {
     return;
   }
@@ -24,10 +24,10 @@ const printHostReport = async (ns, host) => {
   const { phase, step, stepData } = JSON.parse(response.result);
 
   if (phase === '0 (boot-complete)') {
-    const scriptIncome = ns.getScriptIncome(BN_HACK_SCRIPT, host);
-    ns.tprint(`${host} => ${BN_HACK_SCRIPT} income: ${scriptIncome}`);
+    const scriptIncome = await ns.getScriptIncome(BN_HACK_SCRIPT, host);
+    await ns.tprint(`${host} => ${BN_HACK_SCRIPT} income: ${scriptIncome}`);
   } else {
-    ns.tprint(`${host} => Phase: ${phase}, Step: ${step}, Step Data: ${JSON.stringify(stepData)}`);
+    await ns.tprint(`${host} => Phase: ${phase}, Step: ${step}, Step Data: ${JSON.stringify(stepData)}`);
   }
 };
 

@@ -74,11 +74,37 @@ const solvers = [
   },
 ];
 
+const getSolverByName = (name) => {
+  const nameRegex = new RegExp(name, 'i');
+  const args = process.argv.slice(3);
+  return solvers.find(({ name }) => nameRegex.test(name));
+}
+
+const getSolverNames = () => {
+  return solvers.map(solver => solver.name);
+}
+
+const usage = () => {
+  console.log('yarn solve {problem} [...args]');
+  process.exit(1);
+};
+
 const main = () => {
   const problem = process.argv[2];
-  const problemRegex = new RegExp(problem, 'i');
-  const args = process.argv.slice(3);
-  const solver = solvers.find(({ name }) => problemRegex.test(name));
+
+  if (!problem?.trim()) {
+    console.error('Please provide a problem to solve. Choose one of:');
+    console.log(getSolverNames().join(', '));
+    usage();
+  }
+
+  const solver = getSolverByName(problem);
+
+  if (!solver) {
+    console.error(`Unknown solver "${problem}". Choose one of:`);
+    console.log(getSolverNames().join(', '));
+    usage();
+  }
 
   console.log();
   if (solver) {

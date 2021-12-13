@@ -6,12 +6,15 @@
 
 import { loadConfig, saveConfig } from './sm-utils.js';
 
+/**
+* @param {NS} ns
+*/
 export async function main(ns) {
-  const config = loadConfig(ns);
-  config.purchase4SMarketData = ns.purchase4SMarketData();
-  config.purchase4SMarketDataTixApi = ns.purchase4SMarketDataTixApi();
-  config.symbols = ns.getStockSymbols();
+  const config = await loadConfig(ns);
+  config.purchase4SMarketData = ns.stock.purchase4SMarketData();
+  config.purchase4SMarketDataTixApi = ns.stock.purchase4SMarketDataTixApi();
+  config.symbols = ns.stock.getSymbols();
 
   ns.tprint(`Saving new stock market configuration:\n${JSON.stringify(config, null, 2)}`);
-  saveConfig(ns, config);
+  await saveConfig(ns, config);
 }

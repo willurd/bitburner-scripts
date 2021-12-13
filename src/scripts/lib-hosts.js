@@ -18,7 +18,7 @@ export const forEachHost = async (ns, fn, sleepMs = 5) => {
   while (!hostQueue.isEmpty) {
     const hostPath = hostQueue.removeFront();
     const host = hostPath[hostPath.length - 1];
-    const adjacent = ns.scan(host, true);
+    const adjacent = await ns.scan(host, true);
     const stop = await fn(host, hostPath.slice(0, hostPath.length - 1), adjacent);
 
     if (stop === true) {
@@ -38,11 +38,11 @@ export const forEachHost = async (ns, fn, sleepMs = 5) => {
 };
 
 export const forEachOwnedHost = async (ns, fn, sleepMs = 5) => {
-  return forEachHost(
+  return await forEachHost(
     ns,
-    (host, path, adjacent) => {
-      if (ns.hasRootAccess(host)) {
-        fn(host, path, adjacent);
+    async (host, path, adjacent) => {
+      if (await ns.hasRootAccess(host)) {
+        await fn(host, path, adjacent);
       }
     },
     sleepMs,

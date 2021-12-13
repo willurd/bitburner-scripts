@@ -30,14 +30,20 @@ export const saveConfig = (ns, config) => {
   ns.write(configFile, JSON.stringify(config, null, 2));
 };
 
+/**
+ * @param {NS} ns
+ */
 export const buildStock = (ns, symbol) => ({
   symbol,
-  price: ns.getStockPrice(symbol),
-  position: ns.getStockPosition(symbol),
-  volatility: ns.getStockVolatility(symbol),
-  forecast: ns.getStockForecast(symbol),
+  price: ns.stock.getPrice(symbol),
+  position: ns.stock.getPosition(symbol),
+  volatility: ns.stock.getVolatility(symbol),
+  forecast: ns.stock.getForecast(symbol),
 });
 
+/**
+ * @param {NS} ns
+ */
 export const sellPositions = (ns, stocks, isSimulated) => {
   for (const {
     symbol,
@@ -49,7 +55,7 @@ export const sellPositions = (ns, stocks, isSimulated) => {
       ns.tprint(`Selling ${shares} shares of ${symbol} at ${formatMoney(price)}, for a return of ${formatMoney(ret)}`);
 
       if (!isSimulated) {
-        ns.sellStock(symbol, shares);
+        ns.stock.sell(symbol, shares);
       }
     }
   }

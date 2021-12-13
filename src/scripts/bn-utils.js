@@ -13,9 +13,9 @@ export const dbDefaults = {
   log: [],
 };
 
-export const loadDb = (ns) => {
+export const loadDb = async (ns) => {
   try {
-    const content = ns.read(dbFile);
+    const content = await ns.read(dbFile);
     const json = JSON.parse(content);
     return Object.assign({}, dbDefaults, json);
   } catch (e) {
@@ -23,26 +23,26 @@ export const loadDb = (ns) => {
   }
 };
 
-export const saveDb = (ns, db) => {
-  ns.write(dbFile, JSON.stringify(db, null, 2), 'w');
+export const saveDb = async (ns, db) => {
+  await ns.write(dbFile, JSON.stringify(db, null, 2), 'w');
 };
 
-export const updateDb = (ns, fn) => {
-  const db = loadDb(ns);
-  const updatedDb = fn(db);
-  saveDb(ns, updatedDb);
+export const updateDb = async (ns, fn) => {
+  const db = await loadDb(ns);
+  const updatedDb = await fn(db);
+  await saveDb(ns, updatedDb);
 };
 
-export const setDbKey = (ns, key, value) => {
-  updateDb(ns, (db) => {
+export const setDbKey = async (ns, key, value) => {
+  await updateDb(ns, (db) => {
     const newDb = Object.assign({}, db);
     newDb[key] = value;
     return newDb;
   });
 };
 
-export const setDbKeys = (ns, data) => {
-  updateDb(ns, (db) => {
+export const setDbKeys = async (ns, data) => {
+  await updateDb(ns, (db) => {
     return Object.assign({}, db, data);
   });
 };

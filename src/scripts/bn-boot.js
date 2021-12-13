@@ -1,5 +1,4 @@
 import { setDbKeys, updateDb } from './bn-utils.js';
-import { forEachHost } from './lib-hosts.js';
 
 /**
  * TODO: This is pretty much an FSM. Write some nice utilities for FSMs.
@@ -51,69 +50,69 @@ export const BOOT_SCRIPT_GRAPH = {
   'bn-boot-6.js': null, // This is the final boot step.
 };
 
-export const log = (ns, message) => {
-  const thisHost = ns.getHostname();
+export const log = async (ns, message) => {
+  const thisHost = await ns.getHostname();
   const fullMessage = `[bn:${thisHost}] ${message}`;
-  ns.tprint(fullMessage);
-  addToLog(ns, fullMessage);
+  await ns.tprint(fullMessage);
+  await addToLog(ns, fullMessage);
 };
 
-export const clearLog = (ns) => {
-  return setDbKeys(ns, { log: [] });
+export const clearLog = async (ns) => {
+  return await setDbKeys(ns, { log: [] });
 };
 
-export const addToLog = (ns, message) => {
-  return updateDb(ns, (db) => {
+export const addToLog = async (ns, message) => {
+  return await updateDb(ns, (db) => {
     const log = (db.log || []).slice();
     log.push(message);
     return Object.assign({}, db, { log });
   });
 };
 
-export const isCommandHost = (ns) => {
-  const thisHost = ns.getHostname();
+export const isCommandHost = async (ns) => {
+  const thisHost = await ns.getHostname();
   return thisHost === CNC_HOST || thisHost === HOME_HOST;
 };
 
-export const getAdjacentHosts = (ns) => {
-  return ns.scan().filter((h) => h !== CNC_HOST);
+export const getAdjacentHosts = async (ns) => {
+  return await ns.scan().filter((h) => h !== CNC_HOST);
 };
 
-export const setPhase = (ns, number, name) => {
-  return setDbKeys(ns, { phase: `${number} (${name})` });
+export const setPhase = async (ns, number, name) => {
+  return await setDbKeys(ns, { phase: `${number} (${name})` });
 };
 
-export const setStep = (ns, step, data = {}) => {
-  log(ns, `Step: ${step}, ${JSON.stringify(data)}`);
-  return setDbKeys(ns, {
+export const setStep = async (ns, step, data = {}) => {
+  await log(ns, `Step: ${step}, ${JSON.stringify(data)}`);
+  return await setDbKeys(ns, {
     step,
     stepData: data,
   });
 };
 
-export const setPropagatedTo = (ns, propagatedTo) => {
-  return setDbKeys(ns, { propagatedTo });
+export const setPropagatedTo = async (ns, propagatedTo) => {
+  return await setDbKeys(ns, { propagatedTo });
 };
 
-export const setOwned = (ns, owned) => {
-  return setDbKeys(ns, { owned });
+export const setOwned = async (ns, owned) => {
+  return await setDbKeys(ns, { owned });
 };
 
 export const phase = async (ns, number, name, fn) => {
-  log(ns, `Entering phase ${number} (${name}).`);
-  setPhase(ns, number, name);
-  const ret = await fn(ns);
-  log(ns, `Phase ${number} (${name}) complete.`);
-  setStep(ns, 'done');
-  nextBootPhase(ns);
+  await log(ns, `Entering phase ${number} (${name}).`);
+  await setPhase(ns, number, name);
+  await fn(ns);
+  await log(ns, `Phase ${number} (${name}) complete.`);
+  await setStep(ns, 'done');
+  await nextBootPhase(ns);
 };
 
-export const nextBootPhase = (ns) => {
-  const thisScript = ns.getScriptName();
+export const nextBootPhase = async (ns) => {
+  const thisScript = await ns.getScriptName();
   const nextScript = BOOT_SCRIPT_GRAPH[thisScript];
 
   if (nextScript) {
-    log(ns, `Spawning next script in the boot sequence: ${nextScript}`);
+    await log(ns, `Spawning next script in the boot sequence: ${nextScript}`);
     ns.spawn(nextScript, 1);
   }
 };
@@ -121,11 +120,11 @@ export const nextBootPhase = (ns) => {
 export async function main(ns) {
   if (ns.args[0] === 'size') {
     for (const script of Object.keys(BOOT_SCRIPT_GRAPH)) {
-      ns.tprint(`${script} => ${ns.getScriptRam(script)}`);
+      await ns.tprint(`${script} => ${ns.getScriptRam(script)}`);
     }
   } else {
-    clearLog(ns);
+    await clearLog(ns);
     log(ns, 'Initiating botnet boot sequence');
-    nextBootPhase(ns);
+    await nextBootPhase(ns);
   }
 }

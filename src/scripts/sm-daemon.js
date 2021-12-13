@@ -54,10 +54,13 @@ const canUseScript = (ns) => {
 };
 
 // TODO: Move these functions to `sm-utils.js`.
-const isStockHeld = (stock) => stock.position[0] > 0;
+const getHeldShares = (stock) => stock.position[0];
+const getAveragePositionPrice = (stock) => stock.position[1];
+const isStockHeld = (stock) => getHeldShares(stock) > 0;
+const isStockGood = (stock) => stock.forecast > 0.6;
 const getHeldStocks = (stocks) => stocks.filter(isStockHeld);
-const getGoodStocks = (stocks) => stocks.filter((stock) => stock.forecast > 0.6);
-const getPositionValue = (stock) => stock.position[0] * stock.position[1];
+const getGoodStocks = (stocks) => stocks.filter(isStockGood);
+const getPositionValue = (stock) => getHeldShares(stock) * getAveragePositionPrice(stock);
 
 const tick = async (ns, state, config, iteration, isSimulated) => {
   const stocks = config.symbols
@@ -72,6 +75,7 @@ const tick = async (ns, state, config, iteration, isSimulated) => {
       }
     });
   const heldStocks = getHeldStocks(stocks);
+  const badHeldStocks = heldStocks.filter((stock) => !isStockGood(stock));
   const goodStocks = getGoodStocks(stocks);
 
   if (goodStocks.length === 0) {
@@ -119,7 +123,8 @@ const tick = async (ns, state, config, iteration, isSimulated) => {
         );
       }
     } else {
-      const shares = Math.floor(availableMoney / bestStock.price);
+      const maxPurchaseableShares = ns.stock.getMaxShares(bestStock.symbol) - getHeldShares(bestStock);
+      const shares = Math.min(maxPurchaseableShares, Math.floor(availableMoney / bestStock.price));
 
       if (shares > 0) {
         if (isSimulated) {
@@ -142,7 +147,7 @@ const tick = async (ns, state, config, iteration, isSimulated) => {
           );
 
           if (!isSimulated) {
-            ns.buyStock(bestStock.symbol, shares);
+            ns.stock.buy(bestStock.symbol, shares);
           }
         }
       }
@@ -150,6 +155,9 @@ const tick = async (ns, state, config, iteration, isSimulated) => {
   }
 };
 
+/**
+ * @param {NS} ns
+ */
 export async function main(ns) {
   const isSimulated = ns.args[0] === 1;
   const maxIterations = Number.POSITIVE_INFINITY;
