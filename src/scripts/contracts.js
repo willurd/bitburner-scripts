@@ -3,7 +3,18 @@
  */
 
 import { forEachHost } from './lib-hosts.js';
-import { arrayJumpingGame, mergeOverlappingIntervals } from './contract-solutions.js';
+import {
+  algorithmicStockTraderI,
+  algorithmicStockTraderII,
+  algorithmicStockTraderIII,
+  algorithmicStockTraderIV,
+  arrayJumpingGame,
+  findLargestPrimeFactor,
+  generateIPAddresses,
+  mergeOverlappingIntervals,
+  spiralizeMatrix,
+  subarrayWithMaximumSum,
+} from './contract-solutions.js';
 
 /** @param {NS} ns */
 const unknownSolver = async (ns, host, file) => {
@@ -25,11 +36,11 @@ const makeSolver = (solution, isSimulated) => {
       const numTriesLeft = ns.codingcontract.getNumTriesRemaining(file, host);
       const minTriesRemaining = MIN_TRIES_REMAINING[contractType] || defaultMinTriesRemaining;
 
-      ns.tprint(`-----[ Solving Contract ]-----`);
+      printHeading(ns, 'Solving Contract');
       ns.tprint(`Host: ${host}`);
       ns.tprint(`File: ${file}`);
       ns.tprint(`Type: ${contractType}`);
-      ns.tprint(`Input: ${input}`);
+      ns.tprint(`Input: ${JSON.stringify(input)}`);
       ns.tprint(`Attempts Left: ${numTriesLeft}`);
       ns.tprint(`Minimum Attempts Left Required: ${minTriesRemaining}`);
 
@@ -59,11 +70,19 @@ const makeSolver = (solution, isSimulated) => {
 };
 
 const SOLVERS = {
+  'Algorithmic Stock Trader I': makeSolver(algorithmicStockTraderI),
+  'Algorithmic Stock Trader II': makeSolver(algorithmicStockTraderII),
+  'Algorithmic Stock Trader III': makeSolver(algorithmicStockTraderIII),
+  'Algorithmic Stock Trader IV': makeSolver(algorithmicStockTraderIV),
   'Array Jumping Game': makeSolver(arrayJumpingGame),
   'Find All Valid Math Expressions': unsolvedSolver,
+  'Find Largest Prime Factor': makeSolver(findLargestPrimeFactor),
+  'Generate IP Addresses': makeSolver(generateIPAddresses),
   'Merge Overlapping Intervals': makeSolver(mergeOverlappingIntervals),
   'Minimum Path Sum in a Triangle': unsolvedSolver,
   'Sanitize Parentheses in Expression': unsolvedSolver,
+  'Spiralize Matrix': makeSolver(spiralizeMatrix),
+  'Subarray with Maximum Sum': makeSolver(subarrayWithMaximumSum),
   'Unique Paths in a Grid I': unsolvedSolver,
   'Unique Paths in a Grid II': unsolvedSolver,
 };
@@ -72,6 +91,10 @@ const defaultMinTriesRemaining = 9;
 
 const MIN_TRIES_REMAINING = {
   'Array Jumping Game': 1,
+};
+
+const printHeading = (ns, heading) => {
+  ns.tprint(`-----[ ${heading} ]-----`);
 };
 
 const canAttempt = async (ns, host, file) => {
@@ -139,7 +162,7 @@ const printInputsByContractType = async (ns) => {
   });
 
   for (const [type, inputArray] of typeToInputMap.entries()) {
-    ns.tprint(`-----[ ${type} ]-----`);
+    printHeading(ns, type);
     for (const input of inputArray) {
       ns.tprint(JSON.stringify(input));
     }
@@ -156,17 +179,38 @@ const printContract = async (ns, host, file) => {
   ns.tprint(`Host: ${host}`);
   ns.tprint(`File: ${file}`);
   ns.tprint(`Type: ${contractType}`);
-  ns.tprint(`Input: ${input}`);
-  ns.tprint();
+  ns.tprint(`Input: ${JSON.stringify(input)}`);
+  ns.tprint('');
   ns.tprint(description);
 };
 
 /** @param {NS} ns */
 const printContracts = async (ns) => {
+  const contractsByType = new Map();
+
   await forEachContract(ns, async (host, file) => {
     const contractType = ns.codingcontract.getContractType(file, host);
-    ns.tprint(`${file} (${contractType}) on ${host}`);
+
+    if (!contractsByType.has(contractType)) {
+      contractsByType.set(contractType, []);
+    }
+
+    contractsByType.get(contractType).push([host, file]);
   });
+
+  const entries = Array.from(contractsByType.entries()).sort((a, b) => {
+    if (a < b) return -1;
+    if (a > b) return 1;
+    return 0;
+  });
+
+  for (const [contractType, contracts] of entries) {
+    printHeading(ns, contractType);
+
+    for (const [host, file] of contracts) {
+      ns.tprint(`${file} (${host})`);
+    }
+  }
 };
 
 /** @param {NS} ns */
@@ -199,9 +243,11 @@ export async function main(ns) {
     await printContract(ns, host, file);
   } else if (command === 'solve-all') {
     await solveAllContracts(ns);
-  } else if (command === 'solve-1') {
+  } else if (command === 'solve') {
     const [host, file] = rest;
     await solveContract(ns, host, file);
+    // } else if (command === 'daemon') {
+    //   // TODO
   } else if (command?.trim()) {
     ns.tprint(`Unknown command: ${command?.trim()}`);
   } else {
