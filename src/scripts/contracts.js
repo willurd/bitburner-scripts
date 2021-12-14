@@ -3,33 +3,99 @@
  */
 
 import { forEachHost } from './lib-hosts.js';
+import { arrayJumpingGame, mergeOverlappingIntervals } from './contract-solutions.js';
 
-const minTriesRemaining = 9;
-
+/** @param {NS} ns */
 const unknownSolver = async (ns, host, file) => {
-  const contractType = ns.codingcontract.getContractType(file, host);
-  ns.tprint(`The contract type "${contractType}" is unknown.`);
+  // const contractType = ns.codingcontract.getContractType(file, host);
+  // ns.tprint(`The contract type "${contractType}" is unknown.`);
+};
+
+/** @param {NS} ns */
+const unsolvedSolver = async (ns, host, file) => {
+  // const contractType = ns.codingcontract.getContractType(file, host);
+  // ns.tprint(`The contract type "${contractType}" is unsolved.`);
+};
+
+const makeSolver = (solution, isSimulated) => {
+  return async (ns, host, file) => {
+    try {
+      const contractType = ns.codingcontract.getContractType(file, host);
+      const input = ns.codingcontract.getData(file, host);
+      const numTriesLeft = ns.codingcontract.getNumTriesRemaining(file, host);
+      const minTriesRemaining = MIN_TRIES_REMAINING[contractType] || defaultMinTriesRemaining;
+
+      ns.tprint(`-----[ Solving Contract ]-----`);
+      ns.tprint(`Host: ${host}`);
+      ns.tprint(`File: ${file}`);
+      ns.tprint(`Type: ${contractType}`);
+      ns.tprint(`Input: ${input}`);
+      ns.tprint(`Attempts Left: ${numTriesLeft}`);
+      ns.tprint(`Minimum Attempts Left Required: ${minTriesRemaining}`);
+
+      if (!canAttempt(ns, host, file)) {
+        ns.tprint(`Cannot attempt contract.`);
+        return;
+      }
+
+      const answer = solution(input);
+      ns.tprint(`Output: ${JSON.stringify(answer)}`);
+
+      if (isSimulated) {
+        ns.tprint('SIMULATED');
+      } else {
+        const result = ns.codingcontract.attempt(answer, file, host, { returnReward: true });
+
+        if (!result?.trim()) {
+          ns.tprint(`Attempt failed.`);
+        } else {
+          ns.tprint(`Attempt succeeded. Reward: ${result}`);
+        }
+      }
+    } catch (e) {
+      ns.tprint(`Error: ${e}`);
+    }
+  };
 };
 
 const SOLVERS = {
-  'Find All Valid Math Expressions': unknownSolver,
-  'Unique Paths in a Grid I': unknownSolver,
-  'Sanitize Parentheses in Expression': unknownSolver,
-  'Unique Paths in a Grid II': unknownSolver,
-  'Merge Overlapping Intervals': unknownSolver,
+  'Array Jumping Game': makeSolver(arrayJumpingGame),
+  'Find All Valid Math Expressions': unsolvedSolver,
+  'Merge Overlapping Intervals': makeSolver(mergeOverlappingIntervals),
+  'Minimum Path Sum in a Triangle': unsolvedSolver,
+  'Sanitize Parentheses in Expression': unsolvedSolver,
+  'Unique Paths in a Grid I': unsolvedSolver,
+  'Unique Paths in a Grid II': unsolvedSolver,
 };
 
-const getSolver = (ns, host, file) => {
+const defaultMinTriesRemaining = 9;
+
+const MIN_TRIES_REMAINING = {
+  'Array Jumping Game': 1,
+};
+
+const canAttempt = async (ns, host, file) => {
   const contractType = ns.codingcontract.getContractType(file, host);
+  const numTriesLeft = ns.codingcontract.getNumTriesRemaining(file, host);
+  const minTriesRemaining = MIN_TRIES_REMAINING[contractType] || defaultMinTriesRemaining;
+  return numTriesLeft >= minTriesRemaining;
+};
+
+/** @param {NS} ns */
+const getSolverFromContractType = (contractType) => {
   return SOLVERS[contractType] || unknownSolver;
 };
 
-const forEachContract = async (ns, fn) => {
-  const test = /^contract-.*\.cct$/;
+/** @param {NS} ns */
+const getSolver = (ns, host, file) => {
+  const contractType = ns.codingcontract.getContractType(file, host);
+  return getSolverFromContractType(contractType);
+};
 
+/** @param {NS} ns */
+const forEachContract = async (ns, fn) => {
   await forEachHost(ns, async (host, path, adjacent) => {
-    const files = await ns.ls(host);
-    const contractFiles = files.filter((f) => test.test(f));
+    const contractFiles = await ns.ls(host, '.cct');
 
     for (const file of contractFiles) {
       await fn(host, file);
@@ -38,16 +104,6 @@ const forEachContract = async (ns, fn) => {
 };
 
 /** @param {NS} ns */
-const solveContract = async (ns, host, file) => {
-  const contractType = ns.codingcontract.getContractType(file, host);
-  const data = ns.codingcontract.getData(file, host);
-  // const description = ns.codingcontract.getDescription(file, host);
-  ns.tprint(`Attempting to solve "${file}" on ${host}`);
-
-  const solver = getSolver(ns, host, file);
-  await solver(ns, host, file);
-};
-
 const printContractTypes = async (ns) => {
   const contractTypes = new Set();
 
@@ -56,14 +112,73 @@ const printContractTypes = async (ns) => {
     contractTypes.add(contractType);
   });
 
-  ns.tprint(Array.from(contractTypes).join('\n'));
+  ns.tprint(
+    Array.from(contractTypes)
+      .map((contractType) => {
+        const solver = getSolverFromContractType(contractType);
+        const label = solver === unknownSolver ? 'unknown' : solver === unsolvedSolver ? 'unsolved' : 'solved';
+        return `${contractType} (${label})`;
+      })
+      .join('\n'),
+  );
 };
 
+/** @param {NS} ns */
+const printInputsByContractType = async (ns) => {
+  const typeToInputMap = new Map();
+
+  await forEachContract(ns, async (host, file) => {
+    const contractType = ns.codingcontract.getContractType(file, host);
+    const data = ns.codingcontract.getData(file, host);
+
+    if (!typeToInputMap.has(contractType)) {
+      typeToInputMap.set(contractType, []);
+    }
+
+    typeToInputMap.get(contractType).push(data);
+  });
+
+  for (const [type, inputArray] of typeToInputMap.entries()) {
+    ns.tprint(`-----[ ${type} ]-----`);
+    for (const input of inputArray) {
+      ns.tprint(JSON.stringify(input));
+    }
+    ns.tprint(``);
+  }
+};
+
+/** @param {NS} ns */
+const printContract = async (ns, host, file) => {
+  const contractType = ns.codingcontract.getContractType(file, host);
+  const input = ns.codingcontract.getData(file, host);
+  const description = ns.codingcontract.getDescription(file, host);
+
+  ns.tprint(`Host: ${host}`);
+  ns.tprint(`File: ${file}`);
+  ns.tprint(`Type: ${contractType}`);
+  ns.tprint(`Input: ${input}`);
+  ns.tprint();
+  ns.tprint(description);
+};
+
+/** @param {NS} ns */
+const printContracts = async (ns) => {
+  await forEachContract(ns, async (host, file) => {
+    const contractType = ns.codingcontract.getContractType(file, host);
+    ns.tprint(`${file} (${contractType}) on ${host}`);
+  });
+};
+
+/** @param {NS} ns */
+const solveContract = async (ns, host, file) => {
+  const solver = getSolver(ns, host, file);
+  return await solver(ns, host, file);
+};
+
+/** @param {NS} ns */
 const solveAllContracts = async (ns) => {
   await forEachContract(ns, async (host, file) => {
-    const numTriesLeft = ns.codingcontract.getNumTriesRemaining(file, host);
-
-    if (numTriesLeft >= minTriesRemaining) {
+    if (await canAttempt(ns, host, file)) {
       await solveContract(ns, host, file);
     }
   });
@@ -71,11 +186,25 @@ const solveAllContracts = async (ns) => {
 
 /** @param {NS} ns */
 export async function main(ns) {
-  const [command] = ns.args;
+  const [command, ...rest] = ns.args;
 
-  if (command === 'print-types') {
+  if (command === 'types') {
     await printContractTypes(ns);
-  } else {
+  } else if (command === 'inputs') {
+    await printInputsByContractType(ns);
+  } else if (command === 'contracts') {
+    await printContracts(ns);
+  } else if (command === 'contract') {
+    const [host, file] = rest;
+    await printContract(ns, host, file);
+  } else if (command === 'solve-all') {
     await solveAllContracts(ns);
+  } else if (command === 'solve-1') {
+    const [host, file] = rest;
+    await solveContract(ns, host, file);
+  } else if (command?.trim()) {
+    ns.tprint(`Unknown command: ${command?.trim()}`);
+  } else {
+    ns.tprint('Please enter a command');
   }
 }

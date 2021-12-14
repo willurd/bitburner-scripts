@@ -66,7 +66,7 @@ const calculateNetWorth = (ns) => {
 const getHeldShares = (stock) => stock.position[0];
 const getAveragePositionPrice = (stock) => stock.position[1];
 const isStockHeld = (stock) => getHeldShares(stock) > 0;
-const isStockGood = (stock) => stock.forecast >= 0.58;
+const isStockGood = (stock) => stock.forecast >= 0.55;
 const getHeldStocks = (stocks) => stocks.filter(isStockHeld);
 const getGoodStocks = (stocks) => stocks.filter(isStockGood);
 const getPositionValue = (stock) => getHeldShares(stock) * getAveragePositionPrice(stock);
@@ -98,7 +98,7 @@ const tick = async (ns, state, config, iteration, isSimulated) => {
     //   ns.print(`${symbol} - price=${price}, position=${position}, volatility=${volatility}, forecast=${forecast}`);
     // }
 
-    const stockPurchaseCount = 3;
+    const stockPurchaseCount = goodStocks.length; // 3;
     const bestStocks = goodStocks.slice(0, stockPurchaseCount);
     const bestStockSymbols = bestStocks.map((s) => s.symbol);
 
