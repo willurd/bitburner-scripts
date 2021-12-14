@@ -9,6 +9,7 @@ import {
   algorithmicStockTraderIII,
   algorithmicStockTraderIV,
   arrayJumpingGame,
+  findAllValidMathExpressions,
   findLargestPrimeFactor,
   generateIPAddresses,
   mergeOverlappingIntervals,
@@ -28,33 +29,38 @@ const unsolvedSolver = async (ns, host, file) => {
   // ns.tprint(`The contract type "${contractType}" is unsolved.`);
 };
 
+const printContractInformation = (ns, host, file) => {
+  const contractType = ns.codingcontract.getContractType(file, host);
+  const input = ns.codingcontract.getData(file, host);
+  const numTriesLeft = ns.codingcontract.getNumTriesRemaining(file, host);
+  const minTriesRemaining = MIN_TRIES_REMAINING[contractType] || defaultMinTriesRemaining;
+
+  ns.tprint(`Host: ${host}`);
+  ns.tprint(`File: ${file}`);
+  ns.tprint(`Type: ${contractType}`);
+  ns.tprint(`Input: ${JSON.stringify(input)}`);
+  ns.tprint(`Attempts Left: ${numTriesLeft}`);
+  ns.tprint(`Minimum Attempts Left Required: ${minTriesRemaining}`);
+};
+
 const makeSolver = (solution, isSimulated) => {
-  return async (ns, host, file) => {
+  return async (ns, host, file, force = false) => {
     try {
-      const contractType = ns.codingcontract.getContractType(file, host);
-      const input = ns.codingcontract.getData(file, host);
-      const numTriesLeft = ns.codingcontract.getNumTriesRemaining(file, host);
-      const minTriesRemaining = MIN_TRIES_REMAINING[contractType] || defaultMinTriesRemaining;
-
       printHeading(ns, 'Solving Contract');
-      ns.tprint(`Host: ${host}`);
-      ns.tprint(`File: ${file}`);
-      ns.tprint(`Type: ${contractType}`);
-      ns.tprint(`Input: ${JSON.stringify(input)}`);
-      ns.tprint(`Attempts Left: ${numTriesLeft}`);
-      ns.tprint(`Minimum Attempts Left Required: ${minTriesRemaining}`);
+      printContractInformation(ns, host, file);
 
-      if (!canAttempt(ns, host, file)) {
-        ns.tprint(`Cannot attempt contract.`);
-        return;
-      }
-
-      const answer = solution(input);
+      const input = ns.codingcontract.getData(file, host);
+      const answer = solution(input, ns);
       ns.tprint(`Output: ${JSON.stringify(answer)}`);
 
       if (isSimulated) {
         ns.tprint('SIMULATED');
       } else {
+        if (!force && !(await canAttempt(ns, host, file))) {
+          ns.tprint(`Cannot attempt contract.`);
+          return;
+        }
+
         const result = ns.codingcontract.attempt(answer, file, host, { returnReward: true });
 
         if (!result?.trim()) {
@@ -75,11 +81,12 @@ const SOLVERS = {
   'Algorithmic Stock Trader III': makeSolver(algorithmicStockTraderIII),
   'Algorithmic Stock Trader IV': makeSolver(algorithmicStockTraderIV),
   'Array Jumping Game': makeSolver(arrayJumpingGame),
+  // 'Find All Valid Math Expressions': makeSolver(findAllValidMathExpressions),
   'Find All Valid Math Expressions': unsolvedSolver,
   'Find Largest Prime Factor': makeSolver(findLargestPrimeFactor),
   'Generate IP Addresses': makeSolver(generateIPAddresses),
   'Merge Overlapping Intervals': makeSolver(mergeOverlappingIntervals),
-  'Minimum Path Sum in a Triangle': unsolvedSolver,
+  'Minimum Path Sum in a Triangle': makeSolver(minimumPathSumInATriangle, true),
   'Sanitize Parentheses in Expression': unsolvedSolver,
   'Spiralize Matrix': makeSolver(spiralizeMatrix),
   'Subarray with Maximum Sum': makeSolver(subarrayWithMaximumSum),
@@ -172,14 +179,8 @@ const printInputsByContractType = async (ns) => {
 
 /** @param {NS} ns */
 const printContract = async (ns, host, file) => {
-  const contractType = ns.codingcontract.getContractType(file, host);
-  const input = ns.codingcontract.getData(file, host);
   const description = ns.codingcontract.getDescription(file, host);
-
-  ns.tprint(`Host: ${host}`);
-  ns.tprint(`File: ${file}`);
-  ns.tprint(`Type: ${contractType}`);
-  ns.tprint(`Input: ${JSON.stringify(input)}`);
+  printContractInformation(ns, host, file);
   ns.tprint('');
   ns.tprint(description);
 };
@@ -214,9 +215,9 @@ const printContracts = async (ns) => {
 };
 
 /** @param {NS} ns */
-const solveContract = async (ns, host, file) => {
+const solveContract = async (ns, host, file, force = false) => {
   const solver = getSolver(ns, host, file);
-  return await solver(ns, host, file);
+  return await solver(ns, host, file, force);
 };
 
 /** @param {NS} ns */
@@ -244,8 +245,8 @@ export async function main(ns) {
   } else if (command === 'solve-all') {
     await solveAllContracts(ns);
   } else if (command === 'solve') {
-    const [host, file] = rest;
-    await solveContract(ns, host, file);
+    const [host, file, force] = rest;
+    await solveContract(ns, host, file, force === 1);
     // } else if (command === 'daemon') {
     //   // TODO
   } else if (command?.trim()) {
@@ -253,4 +254,6 @@ export async function main(ns) {
   } else {
     ns.tprint('Please enter a command');
   }
+
+  ns.tprint('Done');
 }

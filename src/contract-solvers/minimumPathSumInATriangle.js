@@ -1,3 +1,9 @@
+export const minimumPathSumInATriangle = (rows) => {
+  //
+};
+
+export default minimumPathSumInATriangle;
+
 /*
 Minimum Path Sum in a Triangle
 You are attempting to solve a Coding Contract. You have 10 tries remaining, after which the contract will self-destruct.

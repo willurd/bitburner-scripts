@@ -8,7 +8,7 @@ const getMathExpressions = (numberString) => {
   const expressions = [];
 
   for (let i = 1; i <= numberString.length; i++) {
-    if (i > 1 && numberString.startsWith('0')) {
+    if (i > 1 && numberString[0] === '0') {
       break;
     }
 
@@ -27,7 +27,11 @@ const getMathExpressions = (numberString) => {
 export const findAllValidMathExpressions = (numberString, targetValue) => {
   const expressions = getMathExpressions(numberString);
   return expressions.filter((expression) => {
-    return eval(expression) === targetValue;
+    try {
+      return eval(expression) === targetValue;
+    } catch (e) {
+      return false;
+    }
   });
 };
 

@@ -124,19 +124,6 @@ export const generateIPAddresses = (num, size = 4) => {
   return ips;
 };
 
-const mtx = ([string]) => {
-  return string
-    .trim()
-    .split('\n')
-    .map((s) => {
-      return s
-        .trim()
-        .split(',')
-        .filter((v) => v)
-        .map((v) => parseInt(v, 10));
-    });
-};
-
 export const spiralizeMatrix = (matrix) => {
   const array = [];
   const cols = matrix[0].length;
@@ -205,4 +192,41 @@ export const subarrayWithMaximumSum = (array) => {
   }
 
   return largestSum;
+};
+
+const getMathExpressions = (numberString) => {
+  if (!numberString) {
+    return [];
+  } else if (numberString.length === 1) {
+    return [numberString];
+  }
+
+  const expressions = [];
+
+  for (let i = 1; i <= numberString.length; i++) {
+    if (i > 1 && numberString[0] === '0') {
+      break;
+    }
+
+    const digit = numberString.slice(0, i);
+
+    for (const subExpression of getMathExpressions(numberString.slice(i))) {
+      expressions.push(digit + '+' + subExpression);
+      expressions.push(digit + '-' + subExpression);
+      expressions.push(digit + '*' + subExpression);
+    }
+  }
+
+  return expressions;
+};
+
+export const findAllValidMathExpressions = ([numberString, targetValue]) => {
+  const expressions = getMathExpressions(numberString);
+  return expressions.filter((expression) => {
+    try {
+      return eval(expression) === targetValue;
+    } catch (e) {
+      return false;
+    }
+  });
 };
