@@ -17,6 +17,7 @@ import {
   sanitizeParenthesesInExpression,
   spiralizeMatrix,
   subarrayWithMaximumSum,
+  totalWaysToSum,
   uniquePathsInAGridI,
   uniquePathsInAGridII,
 } from './contract-solutions.js';
@@ -33,7 +34,7 @@ const unsolvedSolver = async (ns, host, file) => {
   // ns.tprint(`The contract type "${contractType}" is unsolved.`);
 };
 
-const printContractInformation = (ns, host, file) => {
+const printContractInformation = async (ns, host, file) => {
   const contractType = ns.codingcontract.getContractType(file, host);
   const input = ns.codingcontract.getData(file, host);
   const numTriesLeft = ns.codingcontract.getNumTriesRemaining(file, host);
@@ -45,13 +46,14 @@ const printContractInformation = (ns, host, file) => {
   ns.tprint(`Input: ${JSON.stringify(input)}`);
   ns.tprint(`Attempts Left: ${numTriesLeft}`);
   ns.tprint(`Minimum Attempts Left Required: ${minTriesRemaining}`);
+  ns.tprint(`Can Attempt: ${(await canAttempt(ns, host, file)) ? 'TRUE' : 'FALSE'}`);
 };
 
 const makeSolver = (solution, isSimulated) => {
   return async (ns, host, file, force = false) => {
     try {
       printHeading(ns, 'Solving Contract');
-      printContractInformation(ns, host, file);
+      await printContractInformation(ns, host, file);
 
       const input = ns.codingcontract.getData(file, host);
       const answer = solution(input, ns);
@@ -92,15 +94,15 @@ const SOLVERS = {
   'Merge Overlapping Intervals': makeSolver(mergeOverlappingIntervals),
   'Minimum Path Sum in a Triangle': makeSolver(minimumPathSumInATriangle),
   'Sanitize Parentheses in Expression': makeSolver(sanitizeParenthesesInExpression),
-  // 'Sanitize Parentheses in Expression': unsolvedSolver,
   'Spiralize Matrix': makeSolver(spiralizeMatrix),
   'Subarray with Maximum Sum': makeSolver(subarrayWithMaximumSum),
+  'Total Ways to Sum': makeSolver(totalWaysToSum),
   'Unique Paths in a Grid I': makeSolver(uniquePathsInAGridI),
   // 'Unique Paths in a Grid II': makeSolver(uniquePathsInAGridII, true),
   'Unique Paths in a Grid II': unsolvedSolver,
 };
 
-const defaultMinTriesRemaining = 9;
+const defaultMinTriesRemaining = 5;
 
 const MIN_TRIES_REMAINING = {
   'Array Jumping Game': 1,
@@ -139,6 +141,13 @@ const forEachContract = async (ns, fn) => {
   });
 };
 
+const getSolvedStatus = (contractType) => {
+  const solver = getSolverFromContractType(contractType);
+  if (solver === unknownSolver) return 'unknown';
+  if (solver === unsolvedSolver) return 'unsolved';
+  return 'solved';
+};
+
 /** @param {NS} ns */
 const printContractTypes = async (ns) => {
   const contractTypes = new Set();
@@ -151,9 +160,7 @@ const printContractTypes = async (ns) => {
   ns.tprint(
     Array.from(contractTypes)
       .map((contractType) => {
-        const solver = getSolverFromContractType(contractType);
-        const label = solver === unknownSolver ? 'unknown' : solver === unsolvedSolver ? 'unsolved' : 'solved';
-        return `${contractType} (${label})`;
+        return `${contractType} (${getSolvedStatus(contractType)})`;
       })
       .join('\n'),
   );
@@ -186,7 +193,7 @@ const printInputsByContractType = async (ns) => {
 /** @param {NS} ns */
 const printContract = async (ns, host, file) => {
   const description = ns.codingcontract.getDescription(file, host);
-  printContractInformation(ns, host, file);
+  await printContractInformation(ns, host, file);
   ns.tprint('');
   ns.tprint(description);
 };
@@ -212,7 +219,7 @@ const printContracts = async (ns) => {
   });
 
   for (const [contractType, contracts] of entries) {
-    printHeading(ns, contractType);
+    printHeading(ns, `${contractType} (${getSolvedStatus(contractType)})`);
 
     for (const [host, file] of contracts) {
       ns.tprint(`${file} (${host})`);
@@ -223,7 +230,8 @@ const printContracts = async (ns) => {
 /** @param {NS} ns */
 const solveContract = async (ns, host, file, force = false) => {
   const solver = getSolver(ns, host, file);
-  return await solver(ns, host, file, force);
+  const result = await solver(ns, host, file, force);
+  return result;
 };
 
 /** @param {NS} ns */

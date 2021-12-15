@@ -147,11 +147,11 @@ export const findLargestPrimeFactor = (n) => {
 
 // This function is pretty ugly. I wonder if there's a nicer way
 // to do this.
-export const generateIPAddresses = (num, size = 4) => {
+const allValidIpsGivenNumber = (num, size = 4) => {
   if (size <= 0) {
     return [];
   } else if (size === 1) {
-    if (num.length <= 3 && parseInt(num, 10) <= 255) {
+    if (num.length <= 3 && parseInt(num, 10) <= 255 && (num.length === 1 || num[0] !== '0')) {
       return [num];
     } else {
       return [];
@@ -167,16 +167,18 @@ export const generateIPAddresses = (num, size = 4) => {
 
     // A segment can't start with '0' unless the segment is exactly '0'.
     if (segment.length > 1 && segment[0] === '0') {
-      continue;
+      break;
     }
 
-    if (segment.length <= 3 && parseInt(segment, 10) <= 255) {
-      ips = ips.concat(generateIPAddresses(num.slice(i + 1), size - 1).map((ip) => `${segment}.${ip}`));
+    if (parseInt(segment, 10) <= 255) {
+      ips = ips.concat(allValidIpsGivenNumber(num.slice(i + 1), size - 1).map((ip) => `${segment}.${ip}`));
     }
   }
 
   return ips;
 };
+
+export const generateIPAddresses = (num) => allValidIpsGivenNumber(num);
 
 // ----------------------------------------------------------------------
 // Merge Overlapping Intervals
@@ -359,6 +361,24 @@ export const subarrayWithMaximumSum = (array) => {
   }
 
   return largestSum;
+};
+
+// ----------------------------------------------------------------------
+// Total Ways to Sum
+// ----------------------------------------------------------------------
+
+export const totalWaysToSum = (n) => {
+  const memo = Array.from({ length: n }).fill(0);
+  memo[0] = 1;
+
+  for (let i = 1; i < n; i++) {
+    for (let j = i; j <= n; j++) {
+      memo[j] = memo[j] || 0;
+      memo[j] += memo[j - i];
+    }
+  }
+
+  return memo[n];
 };
 
 // ----------------------------------------------------------------------

@@ -8,6 +8,8 @@ const contract = (name, num, expected) => {
 };
 
 describe('allValidIpsGivenNumber', () => {
+  contract('example-1', 25525511135, ['255.255.11.135', '255.255.111.35']);
+  contract('example-2', 1938718066, ['193.87.180.66']);
   contract('contract-171069', 2507282126, ['250.72.82.126']);
   contract('contract-278276', 1701225238, [
     '170.1.225.238',
@@ -21,4 +23,5 @@ describe('allValidIpsGivenNumber', () => {
   contract('contract-544930', 2339939200, ['233.99.39.200']);
   contract('contract-830662', 41025368, ['4.10.253.68', '4.102.53.68', '41.0.253.68']);
   contract('contract-863407', 21830200188, ['218.30.200.188']);
+  contract('contract-250005', 6728246244, ['67.28.246.244']);
 });

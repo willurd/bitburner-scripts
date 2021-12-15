@@ -23,6 +23,83 @@ export const uniquePathsInAGridII = (grid) => {
 export default uniquePathsInAGridII;
 
 /*
+
+0,0,0,
+0,1,0,
+1,0,0,
+= 1
+
+------
+
+0,0,0,
+0,0,0,
+0,0,1,
+= 0
+
+0,0,0,
+0,0,0,
+0,1,0,
+= 3
+
+0,0,0,
+0,0,0,
+1,0,0,
+= 5
+
+------
+
+0,0,0,
+0,0,0,
+0,0,1,
+= 0
+
+0,0,0,
+0,0,1,
+0,0,0,
+= 3
+
+0,0,1,
+0,0,0,
+0,0,0,
+= 5
+
+------
+
+0,0,1,
+0,0,0,
+0,0,0,
+= 5
+
+0,1,0,
+0,0,0,
+0,0,0,
+= 3
+
+1,0,0,
+0,0,0,
+0,0,0,
+= 0
+
+------
+
+0,0,0,
+0,0,1,
+0,0,0,
+= 3
+
+0,0,0,
+0,1,0,
+0,0,0,
+= 2
+
+0,0,0,
+1,0,0,
+0,0,0,
+= 3
+
+*/
+
+/*
 Unique Paths in a Grid II
 You are attempting to solve a Coding Contract. You have 10 tries remaining, after which the contract will self-destruct.
 
