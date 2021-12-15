@@ -8,21 +8,31 @@ const contract = (name, input, expected) => {
 };
 
 describe('sanitizeParenthesesInExpression', () => {
-  // contract('example-1', '()())()', ['()()()', '(())()']);
-  // contract('example-2', '(a)())()', ['(a)()()', '(a())()']);
-  // contract('contract-925545', '()((a)())', ['()((a)())']);
-  // contract('contract-685696', '(a()a())a())))))', [
-  //   '(a()a())a()',
-  //   '(a()a()a())',
-  //   '(a(a())a())',
-  //   '(a()a(a()))',
-  //   '(a(a()a()))',
-  //   '(a(a(a())))',
-  // ]);
-  contract('contract-345886', '(()a))a((a(()(()', []);
-  // contract('contract-710159', ')()a)(aa()(a((a', []);
-  // contract('', '', []);
-  // contract('', '', []);
-  // contract('', '', []);
-  // contract('', '', []);
+  contract('example-1', '()())()', ['(())()', '()()()']);
+  contract('example-2', '(a)())()', ['(a())()', '(a)()()']);
+  contract('contract-925545', '()((a)())', ['()((a)())']);
+
+  contract('contract-685696', '(a()a())a())))))', [
+    '(a(a(a())))',
+    '(a(a()a()))',
+    '(a(a())a())',
+    '(a()a(a()))',
+    '(a()a()a())',
+    '(a()a())a()',
+  ]);
+
+  contract('contract-345886', '(()a))a((a(()(()', [
+    '((a))aa()()',
+    '((a))aa(())',
+    '((a))a(a)()',
+    '((a))a(a())',
+    '((a))a((a))',
+    '(()a)aa()()',
+    '(()a)aa(())',
+    '(()a)a(a)()',
+    '(()a)a(a())',
+    '(()a)a((a))',
+  ]);
+
+  contract('contract-710159', ')()a)(aa()(a((a', ['(a)aa()aa', '(a)(aa)aa', '()aaa()aa', '()a(aa)aa']);
 });
