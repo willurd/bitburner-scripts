@@ -16,6 +16,8 @@ import {
   minimumPathSumInATriangle,
   spiralizeMatrix,
   subarrayWithMaximumSum,
+  uniquePathsInAGridI,
+  uniquePathsInAGridII,
 } from './contract-solutions.js';
 
 /** @param {NS} ns */
@@ -82,16 +84,18 @@ const SOLVERS = {
   'Algorithmic Stock Trader III': makeSolver(algorithmicStockTraderIII),
   'Algorithmic Stock Trader IV': makeSolver(algorithmicStockTraderIV),
   'Array Jumping Game': makeSolver(arrayJumpingGame),
-  // 'Find All Valid Math Expressions': makeSolver(findAllValidMathExpressions),
+  // 'Find All Valid Math Expressions': makeSolver(findAllValidMathExpressions, true),
   'Find All Valid Math Expressions': unsolvedSolver,
   'Find Largest Prime Factor': makeSolver(findLargestPrimeFactor),
   'Generate IP Addresses': makeSolver(generateIPAddresses),
   'Merge Overlapping Intervals': makeSolver(mergeOverlappingIntervals),
   'Minimum Path Sum in a Triangle': makeSolver(minimumPathSumInATriangle),
+  // 'Sanitize Parentheses in Expression': makeSolver(sanitizeParenthesesInExpression, true),
   'Sanitize Parentheses in Expression': unsolvedSolver,
   'Spiralize Matrix': makeSolver(spiralizeMatrix),
   'Subarray with Maximum Sum': makeSolver(subarrayWithMaximumSum),
-  'Unique Paths in a Grid I': unsolvedSolver,
+  'Unique Paths in a Grid I': makeSolver(uniquePathsInAGridI),
+  // 'Unique Paths in a Grid II': makeSolver(uniquePathsInAGridII, true),
   'Unique Paths in a Grid II': unsolvedSolver,
 };
 

@@ -3,7 +3,7 @@ import numberOfWaysToWriteAsSum from '../../src/contract-solvers/numberOfWaysToW
 const contract = (name, num, expected) => {
   test(name, () => {
     const result = numberOfWaysToWriteAsSum(num);
-    expect(result).toBe(expected);
+    expect(result).toEqual(expected);
   });
 };
 

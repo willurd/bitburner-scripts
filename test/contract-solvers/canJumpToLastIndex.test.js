@@ -4,7 +4,7 @@ const contract = (name, arrayString, expected) => {
   test(name, () => {
     const array = arrayString.split(',').map(Number);
     const result = canJumpToLastIndex(array);
-    expect(result).toBe(expected);
+    expect(result).toEqual(expected);
   });
 };
 

@@ -3,7 +3,7 @@ import largestPrimeFactor from '../../src/contract-solvers/largestPrimeFactor';
 const contract = (name, num, expected) => {
   test(name, () => {
     const result = largestPrimeFactor(num);
-    expect(result).toBe(expected);
+    expect(result).toEqual(expected);
   });
 };
 

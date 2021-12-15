@@ -1,3 +1,27 @@
+export const uniquePathsInAGridII = (grid) => {
+  const memo = {};
+  const rows = grid.length;
+  const columns = grid[0].length;
+
+  for (let r = 1; r <= rows; r++) {
+    memo[r] = {};
+
+    for (let c = 1; c <= columns; c++) {
+      if (grid[r - 1][c - 1] === 1) {
+        memo[r][c] = 0;
+      } else if (r === 1 || c === 1) {
+        memo[r][c] = 1;
+      } else {
+        memo[r][c] = memo[r - 1][c] + memo[r][c - 1];
+      }
+    }
+  }
+
+  return memo[rows][columns];
+};
+
+export default uniquePathsInAGridII;
+
 /*
 Unique Paths in a Grid II
 You are attempting to solve a Coding Contract. You have 10 tries remaining, after which the contract will self-destruct.

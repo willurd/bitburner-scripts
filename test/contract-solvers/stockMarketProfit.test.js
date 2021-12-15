@@ -4,7 +4,7 @@ const contract = (name, arrayString, expected, maxTransactions) => {
   test(name, () => {
     const prices = arrayString.split(',').map(Number);
     const profit = stockMarketProfit(prices, maxTransactions || prices.length - 1);
-    expect(profit).toBe(expected);
+    expect(profit).toEqual(expected);
   });
 };
 

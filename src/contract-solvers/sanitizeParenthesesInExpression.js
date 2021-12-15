@@ -1,3 +1,24 @@
+export const sanitizeParenthesesInExpression = (initialExpression) => {
+  const queue = [initialExpression];
+  const valid = [];
+
+  while (queue.length > 0) {
+    const expression = queue.shift();
+
+    if (expression.length === 0) {
+      continue;
+    } else if (hasMatchedParentheses(expression)) {
+      valid.push(initialExpression);
+    } else {
+      for (let i = 0; i < expression.length; i++) {}
+    }
+  }
+
+  return valid;
+};
+
+export default sanitizeParenthesesInExpression;
+
 /*
 Sanitize Parentheses in Expression
 You are attempting to solve a Coding Contract. You have 10 tries remaining, after which the contract will self-destruct.
@@ -12,7 +33,7 @@ remove the minimum number of invalid parentheses in order to validate the string
 IMPORTANT: The string may contain letters, not just parentheses. Examples:
 "()())()" -> [()()(), (())()]
 "(a)())()" -> [(a)()(), (a())()]
-")( -> [""]
+")(" -> [""]
 */
 
 /*
