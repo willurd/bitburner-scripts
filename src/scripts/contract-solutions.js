@@ -1,35 +1,6 @@
-export const mergeOverlappingIntervals = (intervals) => {
-  const clonedIntervals = intervals.map((i) => i.slice());
-  const sortedIntervals = clonedIntervals.sort((a, b) => a[0] - b[0]);
-
-  let mergedIntervals = [];
-  let lastInterval;
-
-  for (const interval of sortedIntervals) {
-    if (!lastInterval || interval[0] > lastInterval[1]) {
-      mergedIntervals.push(interval);
-      lastInterval = interval;
-    } else if (interval[1] > lastInterval[1]) {
-      lastInterval[1] = interval[1];
-    }
-  }
-
-  return mergedIntervals;
-};
-
-export const arrayJumpingGame = (array) => {
-  let jumpDistance = 0;
-
-  for (let i = 0; i < array.length; i++) {
-    jumpDistance = Math.max(jumpDistance, array[i]);
-
-    if (jumpDistance <= 0) {
-      return 0;
-    }
-  }
-
-  return 1;
-};
+// ----------------------------------------------------------------------
+// Algorithmic Stock Trader Utils
+// ----------------------------------------------------------------------
 
 const stockMarketProfit = (stocks, maxTransactions = stocks.length - 1) => {
   const n = stocks.length;
@@ -57,13 +28,92 @@ const stockMarketProfit = (stocks, maxTransactions = stocks.length - 1) => {
   return table[k][n - 1];
 };
 
+// ----------------------------------------------------------------------
+// Algorithmic Stock Trader I
+// ----------------------------------------------------------------------
+
 export const algorithmicStockTraderI = (stocks) => stockMarketProfit(stocks, 1);
+
+// ----------------------------------------------------------------------
+// Algorithmic Stock Trader II
+// ----------------------------------------------------------------------
 
 export const algorithmicStockTraderII = (stocks) => stockMarketProfit(stocks, stocks.length - 1);
 
+// ----------------------------------------------------------------------
+// Algorithmic Stock Trader III
+// ----------------------------------------------------------------------
+
 export const algorithmicStockTraderIII = (stocks) => stockMarketProfit(stocks, 2);
 
+// ----------------------------------------------------------------------
+// Algorithmic Stock Trader IV
+// ----------------------------------------------------------------------
+
 export const algorithmicStockTraderIV = ([k, stocks]) => stockMarketProfit(stocks, k);
+
+// ----------------------------------------------------------------------
+// Array Jumping Game
+// ----------------------------------------------------------------------
+
+export const arrayJumpingGame = (array) => {
+  let jumpDistance = 0;
+
+  for (let i = 0; i < array.length; i++) {
+    jumpDistance = Math.max(jumpDistance, array[i]);
+
+    if (jumpDistance <= 0) {
+      return 0;
+    }
+  }
+
+  return 1;
+};
+
+// ----------------------------------------------------------------------
+// Find All Valid Math Expressions
+// ----------------------------------------------------------------------
+
+const getMathExpressions = (numberString) => {
+  if (!numberString) {
+    return [];
+  } else if (numberString.length === 1) {
+    return [numberString];
+  }
+
+  const expressions = [];
+
+  for (let i = 1; i <= numberString.length; i++) {
+    if (i > 1 && numberString[0] === '0') {
+      break;
+    }
+
+    const digit = numberString.slice(0, i);
+
+    for (const subExpression of getMathExpressions(numberString.slice(i))) {
+      expressions.push(digit + '+' + subExpression);
+      expressions.push(digit + '-' + subExpression);
+      expressions.push(digit + '*' + subExpression);
+    }
+  }
+
+  return expressions;
+};
+
+export const findAllValidMathExpressions = ([numberString, targetValue]) => {
+  const expressions = getMathExpressions(numberString);
+  return expressions.filter((expression) => {
+    try {
+      return eval(expression) === targetValue;
+    } catch (e) {
+      return false;
+    }
+  });
+};
+
+// ----------------------------------------------------------------------
+// Find Largest Prime Factor
+// ----------------------------------------------------------------------
 
 const getPrimeFactors = (n) => {
   const factors = [];
@@ -90,6 +140,10 @@ export const findLargestPrimeFactor = (n) => {
   const factors = getPrimeFactors(n);
   return factors[factors.length - 1];
 };
+
+// ----------------------------------------------------------------------
+// Generate IP Addresses
+// ----------------------------------------------------------------------
 
 // This function is pretty ugly. I wonder if there's a nicer way
 // to do this.
@@ -123,6 +177,66 @@ export const generateIPAddresses = (num, size = 4) => {
 
   return ips;
 };
+
+// ----------------------------------------------------------------------
+// Merge Overlapping Intervals
+// ----------------------------------------------------------------------
+
+export const mergeOverlappingIntervals = (intervals) => {
+  const clonedIntervals = intervals.map((i) => i.slice());
+  const sortedIntervals = clonedIntervals.sort((a, b) => a[0] - b[0]);
+
+  let mergedIntervals = [];
+  let lastInterval;
+
+  for (const interval of sortedIntervals) {
+    if (!lastInterval || interval[0] > lastInterval[1]) {
+      mergedIntervals.push(interval);
+      lastInterval = interval;
+    } else if (interval[1] > lastInterval[1]) {
+      lastInterval[1] = interval[1];
+    }
+  }
+
+  return mergedIntervals;
+};
+
+// ----------------------------------------------------------------------
+// Minimum Path Sum in a Triangle
+// ----------------------------------------------------------------------
+
+export const minimumPathSumInATriangle = (rows) => {
+  let allPaths = [{ lastIndex: 0, value: rows[0][0] }];
+  let minValue = Number.POSITIVE_INFINITY;
+
+  for (let i = 1; i < rows.length; i++) {
+    const row = rows[i];
+    const paths = allPaths;
+    allPaths = [];
+    minValue = Number.POSITIVE_INFINITY;
+
+    for (let j = 0; j < paths.length; j++) {
+      const path = paths[j];
+      const aIndex = path.lastIndex;
+      const bIndex = path.lastIndex + 1;
+      const a = path.value + row[aIndex];
+      const b = path.value + row[bIndex];
+      allPaths.push({ lastIndex: aIndex, value: a });
+      allPaths.push({ lastIndex: bIndex, value: b });
+      minValue = Math.min(Math.min(a, b), minValue);
+    }
+  }
+
+  return minValue;
+};
+
+// ----------------------------------------------------------------------
+// Sanitize Parentheses in Expression
+// ----------------------------------------------------------------------
+
+// ----------------------------------------------------------------------
+// Spiralize Matrix
+// ----------------------------------------------------------------------
 
 export const spiralizeMatrix = (matrix) => {
   const array = [];
@@ -166,6 +280,10 @@ export const spiralizeMatrix = (matrix) => {
   return array;
 };
 
+// ----------------------------------------------------------------------
+// Subarray with Maximum Sum
+// ----------------------------------------------------------------------
+
 const subArraySum = (array, start, end) => {
   let sum = 0;
 
@@ -176,7 +294,6 @@ const subArraySum = (array, start, end) => {
   return sum;
 };
 
-// TODO: Can the runtime be improved?
 export const subarrayWithMaximumSum = (array) => {
   const len = array.length;
   let largestSum = Number.NEGATIVE_INFINITY;
@@ -194,39 +311,10 @@ export const subarrayWithMaximumSum = (array) => {
   return largestSum;
 };
 
-const getMathExpressions = (numberString) => {
-  if (!numberString) {
-    return [];
-  } else if (numberString.length === 1) {
-    return [numberString];
-  }
+// ----------------------------------------------------------------------
+// Unique Paths in a Grid I
+// ----------------------------------------------------------------------
 
-  const expressions = [];
-
-  for (let i = 1; i <= numberString.length; i++) {
-    if (i > 1 && numberString[0] === '0') {
-      break;
-    }
-
-    const digit = numberString.slice(0, i);
-
-    for (const subExpression of getMathExpressions(numberString.slice(i))) {
-      expressions.push(digit + '+' + subExpression);
-      expressions.push(digit + '-' + subExpression);
-      expressions.push(digit + '*' + subExpression);
-    }
-  }
-
-  return expressions;
-};
-
-export const findAllValidMathExpressions = ([numberString, targetValue]) => {
-  const expressions = getMathExpressions(numberString);
-  return expressions.filter((expression) => {
-    try {
-      return eval(expression) === targetValue;
-    } catch (e) {
-      return false;
-    }
-  });
-};
+// ----------------------------------------------------------------------
+// Unique Paths in a Grid II
+// ----------------------------------------------------------------------

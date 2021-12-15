@@ -13,6 +13,7 @@ import {
   findLargestPrimeFactor,
   generateIPAddresses,
   mergeOverlappingIntervals,
+  minimumPathSumInATriangle,
   spiralizeMatrix,
   subarrayWithMaximumSum,
 } from './contract-solutions.js';
@@ -86,7 +87,7 @@ const SOLVERS = {
   'Find Largest Prime Factor': makeSolver(findLargestPrimeFactor),
   'Generate IP Addresses': makeSolver(generateIPAddresses),
   'Merge Overlapping Intervals': makeSolver(mergeOverlappingIntervals),
-  'Minimum Path Sum in a Triangle': makeSolver(minimumPathSumInATriangle, true),
+  'Minimum Path Sum in a Triangle': makeSolver(minimumPathSumInATriangle),
   'Sanitize Parentheses in Expression': unsolvedSolver,
   'Spiralize Matrix': makeSolver(spiralizeMatrix),
   'Subarray with Maximum Sum': makeSolver(subarrayWithMaximumSum),
