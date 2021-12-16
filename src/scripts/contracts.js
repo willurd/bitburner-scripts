@@ -51,6 +51,8 @@ const printContractInformation = async (ns, host, file) => {
 
 const makeSolver = (solution, isSimulated) => {
   return async (ns, host, file, force = false) => {
+    let isPassed = false;
+
     try {
       printHeading(ns, 'Solving Contract');
       await printContractInformation(ns, host, file);
@@ -73,11 +75,14 @@ const makeSolver = (solution, isSimulated) => {
           ns.tprint(`Attempt failed.`);
         } else {
           ns.tprint(`Attempt succeeded. Reward: ${result}`);
+          isPassed = true;
         }
       }
     } catch (e) {
       ns.tprint(`Error: ${e}`);
     }
+
+    return isPassed;
   };
 };
 
@@ -228,23 +233,57 @@ const printContracts = async (ns) => {
 /** @param {NS} ns */
 const solveContract = async (ns, host, file, force = false) => {
   const solver = getSolver(ns, host, file);
-  const result = await solver(ns, host, file, force);
-  return result;
+  const isPassed = await solver(ns, host, file, force);
+  return isPassed;
 };
 
 /** @param {NS} ns */
-const solveAllContracts = async (ns) => {
+const solveAllContracts = async (ns, options = {}) => {
+  const shouldAttempt = async (host, file) => {
+    if (!canAttempt(ns, host, file)) {
+      return false;
+    } else if (options.shouldAttemptContract && !options.shouldAttemptContract(host, file)) {
+      return false;
+    }
+
+    return true;
+  };
+
+  const force = false;
+
   await forEachContract(ns, async (host, file) => {
-    if (await canAttempt(ns, host, file)) {
-      await solveContract(ns, host, file);
+    if (await shouldAttempt(ns, host, file)) {
+      const isPassed = await solveContract(ns, host, file);
+
+      if (options.onContractResult) {
+        options.onContractResult(host, file, options.onContractResult);
+      }
     }
   });
 };
 
 /** @param {NS} ns */
 const runDaemon = async (ns) => {
+  const failed = new Set();
+
+  const createContractKey = (host, file) => `${host}:${file}`;
+
+  const shouldAttemptContract = (host, file) => !failed.has(createContractKey(host, file));
+
+  const onContractResult = (host, file, isPassed) => {
+    const key = createContractKey(host, file);
+
+    if (isPassed) {
+      failed.delete(key);
+    } else {
+      failed.add(key);
+    }
+  };
+
+  const options = { shouldAttemptContract, onContractResult };
+
   while (true) {
-    await solveAllContracts(ns);
+    await solveAllContracts(ns, options);
     await ns.sleep(10000);
   }
 };
