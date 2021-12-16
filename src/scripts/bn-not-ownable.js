@@ -149,9 +149,7 @@ const BN_OWN_SCRIPT = 'bn-own.js';
 export async function main(ns) {
   // TODO: Accept an optional hostname argument. If given, only check that host.
 
-  let ownableHostCount = 0;
-  let ownedCount = 0;
-  // let propagatedCount = 0;
+  let notOwnableHostCount = 0;
 
   await forEachHost(ns, async (host, path, adjacent) => {
     if (ns.hasRootAccess(host)) {
@@ -163,44 +161,21 @@ export async function main(ns) {
     const availableHacks = hacks.filter(({ filename }) => ns.fileExists(filename, 'home'));
     const openPorts = availableHacks.length;
     const requiredOpenPorts = ns.getServerNumPortsRequired(host);
-    // const maxRam = ns.getServerRam(host)[0];
-    // const money = ns.getServerMaxMoney(host);
+    const hasRequiredHackingLevel = hackingLevel >= requiredHackingLevel;
+    const hasRequiredPorts = openPorts >= requiredOpenPorts;
+    const isOwnable = hasRequiredHackingLevel && hasRequiredPorts;
 
-    if (hackingLevel >= requiredHackingLevel && openPorts >= requiredOpenPorts) {
-      ownableHostCount += 1;
-
-      ns.tprint(`Attempting to own host: ${host}`);
-
-      if (!(await ns.run(BN_OWN_SCRIPT, 1, host))) {
-        ns.tprint(`Unable to run ${BN_OWN_SCRIPT} for host: ${host}`);
-        return;
-      }
-
-      while (ns.isRunning(BN_OWN_SCRIPT, ns.getHostname(), host)) {
-        await ns.sleep(1000);
-      }
-
-      ownedCount += 1;
-
-      // ns.tprint(`Attempting to propagate to host: ${host}`);
-
-      // if (!(await ns.run(BN_PROPAGATE_SCRIPT, 1, host))) {
-      //   ns.tprint(`Unable to run ${BN_PROPAGATE_SCRIPT} for host: ${host}`);
-      //   return;
-      // }
-
-      // while (ns.isRunning(BN_PROPAGATE_SCRIPT, ns.getHostname(), host)) {
-      //   await ns.sleep(1000);
-      // }
-
-      // propagatedCount += 1;
+    if (!isOwnable) {
+      notOwnableHostCount += 1;
+      const hackingLevelReport = hasRequiredHackingLevel
+        ? ''
+        : `Hacking level too low (requires ${requiredHackingLevel}).`;
+      const portsReport = hasRequiredPorts ? '' : `Not enough hackable ports (requires ${requiredOpenPorts})`;
+      ns.tprint(`${host} is not ownable. ${hackingLevelReport} ${portsReport}`);
     }
   });
 
-  if (ownableHostCount === 0) {
-    ns.tprint('There are no hosts that are currently ownable');
-  } else {
-    ns.tprint(`Owned ${ownedCount} of ${ownableHostCount} ownable hosts`);
-    // ns.tprint(`Propagated to ${propagatedCount} of ${ownableHostCount} ownable hosts`);
+  if (notOwnableHostCount === 0) {
+    ns.tprint('There are no hosts that are not ownable');
   }
 }

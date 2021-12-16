@@ -87,8 +87,7 @@ const SOLVERS = {
   'Algorithmic Stock Trader III': makeSolver(algorithmicStockTraderIII),
   'Algorithmic Stock Trader IV': makeSolver(algorithmicStockTraderIV),
   'Array Jumping Game': makeSolver(arrayJumpingGame),
-  // 'Find All Valid Math Expressions': makeSolver(findAllValidMathExpressions, true),
-  'Find All Valid Math Expressions': unsolvedSolver,
+  'Find All Valid Math Expressions': makeSolver(findAllValidMathExpressions),
   'Find Largest Prime Factor': makeSolver(findLargestPrimeFactor),
   'Generate IP Addresses': makeSolver(generateIPAddresses),
   'Merge Overlapping Intervals': makeSolver(mergeOverlappingIntervals),
@@ -243,6 +242,14 @@ const solveAllContracts = async (ns) => {
 };
 
 /** @param {NS} ns */
+const runDaemon = async (ns) => {
+  while (true) {
+    await solveAllContracts(ns);
+    await ns.sleep(10000);
+  }
+};
+
+/** @param {NS} ns */
 export async function main(ns) {
   const [command, ...rest] = ns.args;
 
@@ -260,8 +267,8 @@ export async function main(ns) {
   } else if (command === 'solve') {
     const [host, file, force] = rest;
     await solveContract(ns, host, file, force === 1);
-    // } else if (command === 'daemon') {
-    //   // TODO
+  } else if (command === 'daemon') {
+    await runDaemon(ns);
   } else if (command?.trim()) {
     ns.tprint(`Unknown command: ${command?.trim()}`);
   } else {

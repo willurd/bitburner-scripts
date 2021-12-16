@@ -82,19 +82,15 @@ const getMathExpressions = (numberString) => {
   }
 
   const expressions = [];
+  const digit = numberString.slice(0, 1);
+  const rest = numberString.slice(1);
 
-  for (let i = 1; i <= numberString.length; i++) {
-    if (i > 1 && numberString[0] === '0') {
-      break;
-    }
-
-    const digit = numberString.slice(0, i);
-
-    for (const subExpression of getMathExpressions(numberString.slice(i))) {
-      expressions.push(digit + '+' + subExpression);
-      expressions.push(digit + '-' + subExpression);
-      expressions.push(digit + '*' + subExpression);
-    }
+  for (const subExpression of getMathExpressions(rest)) {
+    // This is "concatenation".
+    expressions.push(digit + '' + subExpression);
+    expressions.push(digit + '+' + subExpression);
+    expressions.push(digit + '-' + subExpression);
+    expressions.push(digit + '*' + subExpression);
   }
 
   return expressions;
