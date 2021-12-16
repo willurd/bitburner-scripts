@@ -98,8 +98,7 @@ const SOLVERS = {
   'Subarray with Maximum Sum': makeSolver(subarrayWithMaximumSum),
   'Total Ways to Sum': makeSolver(totalWaysToSum),
   'Unique Paths in a Grid I': makeSolver(uniquePathsInAGridI),
-  // 'Unique Paths in a Grid II': makeSolver(uniquePathsInAGridII, true),
-  'Unique Paths in a Grid II': unsolvedSolver,
+  'Unique Paths in a Grid II': makeSolver(uniquePathsInAGridII),
 };
 
 const defaultMinTriesRemaining = 5;
@@ -183,10 +182,10 @@ const printInputsByContractType = async (ns) => {
 
   for (const [type, inputArray] of typeToInputMap.entries()) {
     printHeading(ns, type);
+
     for (const input of inputArray) {
       ns.tprint(JSON.stringify(input));
     }
-    ns.tprint(``);
   }
 };
 

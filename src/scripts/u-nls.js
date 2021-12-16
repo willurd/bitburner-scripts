@@ -9,8 +9,11 @@ export async function main(ns) {
   const test = testString && new RegExp(testString);
   let filesFound = false;
 
-  await forEachHost(ns, async (host, path, adjacent) => {
-    const isOwned = ns.hasRootAccess(host);
+  await forEachHost(ns, async (host) => {
+    if (host === 'home') {
+      return;
+    }
+
     const files = await ns.ls(host);
     const filteredFiles = test ? files.filter((f) => test.test(f)) : files;
 
