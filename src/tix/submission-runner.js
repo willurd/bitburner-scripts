@@ -19,9 +19,28 @@ const scenarios = {
 // https://github.com/danielyxie/bitburner/blob/2945025eb2b20d28f807920b066cfa5a55e4c447/src/Constants.ts#L133
 const STOCK_MARKET_COMMISSION = 100e3;
 
+const units = [
+  ['Q', 1e18],
+  ['q', 1e15],
+  ['t', 1e12],
+  ['b', 1e9],
+  ['m', 1e6],
+];
+
 // https://stackoverflow.com/a/14428340
+const formatNumberWithCommas = (num) => {
+  return num.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+};
+
 const formatMoney = (money) => {
-  return '$' + money.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+  for (const [unit, factor] of units) {
+    if (money >= factor) {
+      const amount = money / factor;
+      return '$' + formatNumberWithCommas(amount) + unit;
+    }
+  }
+
+  return '$' + formatNumberWithCommas(money);
 };
 
 const createNs = (game) => {

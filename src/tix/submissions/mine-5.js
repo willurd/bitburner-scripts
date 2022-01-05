@@ -74,18 +74,32 @@ export async function setup(ns, state) {
   state.minimumCashPercent = 0.01;
 }
 
+const sortStocksByForecast = (a, b) => {
+  if (a.forecast === b.forecast) {
+    // If the forecase is the same, get the stock that will grow faster.
+    return b.volatility - a.volatility;
+  } else {
+    // Otherwise get the stock that is more likely to grow.
+    return b.forecast - a.forecast;
+  }
+};
+
+const sortStocksByPrice = (a, b) => {
+  if (!isStockGood(a)) {
+    return 1;
+  } else if (!isStockGood(b)) {
+    return -1;
+  }
+
+  if (a.price !== b.price) {
+    return b.price - a.price;
+  }
+
+  return sortStocksByForecast(a, b);
+};
+
 export async function tick(ns, state) {
-  const stocks = state.symbols
-    .map((symbol) => buildStock(ns, symbol))
-    .sort((a, b) => {
-      if (a.forecast === b.forecast) {
-        // If the forecase is the same, get the stock that will grow faster.
-        return b.volatility - a.volatility;
-      } else {
-        // Otherwise get the stock that is more likely to grow.
-        return b.forecast - a.forecast;
-      }
-    });
+  const stocks = state.symbols.map((symbol) => buildStock(ns, symbol)).sort(sortStocksByPrice);
   const heldStocks = getHeldStocks(stocks);
   const goodStocks = getGoodStocks(stocks);
 
@@ -101,9 +115,11 @@ export async function tick(ns, state) {
     //   ns.print(`${symbol} - price=${price}, position=${position}, volatility=${volatility}, forecast=${forecast}`);
     // }
 
-    const bestStock = goodStocks[0];
+    const stockPurchaseCount = 2;
+    const bestStocks = goodStocks.slice(0, stockPurchaseCount);
+    const bestStockSymbols = bestStocks.map((s) => s.symbol);
 
-    const otherHeldStocks = heldStocks.filter((stock) => stock.symbol !== bestStock.symbol);
+    const otherHeldStocks = heldStocks.filter((s) => !bestStockSymbols.includes(s.symbol));
     if (otherHeldStocks.length > 0) {
       // Don't sell the best stock if we already own some. No need to incur the
       // commission on the sale because we're just going to buy it right back again.
@@ -111,39 +127,41 @@ export async function tick(ns, state) {
       sellPositions(ns, otherHeldStocks);
     }
 
-    const currentMoney = ns.getServerMoneyAvailable('home');
-    const moneyInStocks = heldStocks.reduce((acc, stock) => acc + getPositionValue(stock), 0);
-    const totalMoney = currentMoney + moneyInStocks;
-    const minimumCashOnHand = Math.max(state.minimumCashOnHand, totalMoney * state.minimumCashPercent);
-    const availableMoney = currentMoney - minimumCashOnHand - commission.buy;
+    for (const stock of bestStocks) {
+      const currentMoney = ns.getServerMoneyAvailable('home');
+      const moneyInStocks = heldStocks.reduce((acc, stock) => acc + getPositionValue(stock), 0);
+      const totalMoney = currentMoney + moneyInStocks;
+      const minimumCashOnHand = Math.max(state.minimumCashOnHand, totalMoney * state.minimumCashPercent);
+      const availableMoney = currentMoney - minimumCashOnHand - commission.buy;
 
-    // TODO: Sell some shares if I need more cash on hand, given the config.
+      // TODO: Sell some shares if I need more cash on hand, given the config.
 
-    if (availableMoney <= 0) {
-      if (!isStockHeld(bestStock)) {
-        ns.print(
-          `You only have ${formatMoney(currentMoney)}, less than the configured minimum cash on hand of ${formatMoney(
-            minimumCashOnHand,
-          )}`,
-        );
-      }
-    } else {
-      const maxPurchaseableShares = ns.stock.getMaxShares(bestStock.symbol) - getHeldShares(bestStock);
-      const shares = Math.min(maxPurchaseableShares, Math.floor(availableMoney / bestStock.price));
+      if (availableMoney <= 0) {
+        if (!isStockHeld(stock)) {
+          ns.print(
+            `You only have ${formatMoney(currentMoney)}, less than the configured minimum cash on hand of ${formatMoney(
+              minimumCashOnHand,
+            )}`,
+          );
+        }
+      } else {
+        const maxPurchaseableShares = ns.stock.getMaxShares(stock.symbol) - getHeldShares(stock);
+        const shares = Math.min(maxPurchaseableShares, Math.floor(availableMoney / stock.price));
 
-      if (shares > 0) {
-        const sharesCost = shares * bestStock.price;
+        if (shares > 0) {
+          const sharesCost = shares * stock.price;
 
-        if (!isStockHeld(bestStock) || sharesCost >= commission.total * 100) {
-          // Don't waste commission money buying stocks worth less than the commission.
-          // const totalCost = sharesCost + commission.buy;
-          // ns.print(
-          //   `Purchasing ${shares} shares${isStockHeld(bestStock) ? ' more' : ''} of ${
-          //     bestStock.symbol
-          //   } at a total of ${formatMoney(totalCost)}.`,
-          // );
+          if (!isStockHeld(stock) || sharesCost >= commission.total * 100) {
+            // Don't waste commission money buying stocks worth less than the commission.
+            // const totalCost = sharesCost + commission.buy;
+            // ns.print(
+            //   `Purchasing ${shares} shares${isStockHeld(stock) ? ' more' : ''} of ${
+            //     stock.symbol
+            //   } at a total of ${formatMoney(totalCost)}.`,
+            // );
 
-          ns.stock.buy(bestStock.symbol, shares);
+            ns.stock.buy(stock.symbol, shares);
+          }
         }
       }
     }

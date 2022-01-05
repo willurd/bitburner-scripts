@@ -1,6 +1,6 @@
-const error = 0.00001;
+import { formatMoney } from './lib-money.js';
 
-const formatMoney = (money) => '$' + Math.round(money);
+const error = 0.00001;
 
 async function createApp(ns, host, maxMoneyPercent, minMoneyPercent) {
   const currentMoney = async () => ns.getServerMoneyAvailable(host);

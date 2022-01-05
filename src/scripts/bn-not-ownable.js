@@ -1,6 +1,3 @@
-// TODO: Import all these libs from their proper files once the
-// dynamic RAM calculation bug is fixed.
-
 class LinkedListNode {
   constructor(value, next) {
     this.value = value;
@@ -138,10 +135,6 @@ export const hacks = [
     command: async (ns, host) => await ns.sqlinject(host),
   },
 ];
-
-export const formatMoney = (money) => {
-  return '$' + money.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-};
 
 const BN_OWN_SCRIPT = 'bn-own.js';
 // const BN_PROPAGATE_SCRIPT = 'bn-propagate.js';

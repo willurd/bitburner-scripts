@@ -20,3 +20,15 @@ This repo is a work in progress.
 - [Bitburner Documentation](https://bitburner.readthedocs.io/en/latest/)
 - [Bitburner Wiki](http://bitburner.wikia.com/wiki/Bitburner_Wiki)
 - [Bitburner Reddit (contains spoilers)](https://www.reddit.com/r/Bitburner/)
+
+## Scripts from other players
+
+- https://github.com/bitburner-official/bitburner-scripts
+- https://github.com/MercuriusXeno/BitBurnerScripts
+- https://github.com/moriakaice/bitburner
+- https://github.com/alainbryden/bitburner-scripts
+- https://github.com/kmelillo/bitburner
+- https://github.com/ChaelCodes/bitburner-scripts
+- https://github.com/jenheilemann/bitburner-scripts
+- https://github.com/alexlee-dev/Bitburner-Community
+- https://github.com/Cinder-dev/bitburner

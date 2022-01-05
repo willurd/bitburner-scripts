@@ -1,6 +1,7 @@
 import { cmd } from './lib-inject.js';
 import { getHostPath } from './lib-hosts.js';
 
+/** @param {NS} ns */
 export async function main(ns) {
   const [host] = ns.args;
 
@@ -17,4 +18,8 @@ export async function main(ns) {
   path.shift();
   const command = `home; ${path.map((p) => `connect ${p}`).join('; ')};`;
   cmd(ns, command);
+}
+
+export function autocomplete(data, args) {
+  return data.servers;
 }
