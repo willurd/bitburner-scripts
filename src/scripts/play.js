@@ -17,7 +17,7 @@ This script will be responsible for controlling subsystems that manage:
 - Periodically reporting stats (net worth, contracts solved since last report, contracts failed/unsolved, etc).
 - Anything else you can script with the API (bladeburner, corporation, formulas, gang, sleeve, stanek).
 
-This program will also need to be able to handle upgrades, so subsystems should be
+This program will also need to be able to handle updates, so subsystems should be
 "hot swappable" in a way.
 
 Another nice feature would be to be able to send data to an external server for things

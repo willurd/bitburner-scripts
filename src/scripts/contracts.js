@@ -49,6 +49,16 @@ const printContractInformation = async (ns, host, file) => {
   ns.tprint(`Can Attempt: ${(await canAttempt(ns, host, file)) ? 'TRUE' : 'FALSE'}`);
 };
 
+const stringifyValue = (value) => {
+  let actualValue = value;
+
+  if (Array.isArray(value) && value.length > 10) {
+    actualValue = [...value.slice(0, 10), '...'];
+  }
+
+  return JSON.stringify(actualValue);
+};
+
 const makeSolver = (solution, isSimulated) => {
   return async (ns, host, file, force = false) => {
     let isPassed = false;
@@ -59,7 +69,7 @@ const makeSolver = (solution, isSimulated) => {
 
       const input = ns.codingcontract.getData(file, host);
       const answer = solution(input, ns);
-      ns.tprint(`Output: ${JSON.stringify(answer)}`);
+      ns.tprint(`Output: ${stringifyValue(answer)}`);
 
       if (isSimulated) {
         ns.tprint('SIMULATED');
@@ -239,8 +249,8 @@ const solveContract = async (ns, host, file, force = false) => {
 
 /** @param {NS} ns */
 const solveAllContracts = async (ns, options = {}) => {
-  const shouldAttempt = async (host, file) => {
-    if (!canAttempt(ns, host, file)) {
+  const shouldAttempt = async (ns, host, file) => {
+    if (!(await canAttempt(ns, host, file))) {
       return false;
     } else if (options.shouldAttemptContract && !options.shouldAttemptContract(host, file)) {
       return false;
@@ -249,14 +259,12 @@ const solveAllContracts = async (ns, options = {}) => {
     return true;
   };
 
-  const force = false;
-
   await forEachContract(ns, async (host, file) => {
     if (await shouldAttempt(ns, host, file)) {
       const isPassed = await solveContract(ns, host, file);
 
       if (options.onContractResult) {
-        options.onContractResult(host, file, options.onContractResult);
+        options.onContractResult(host, file, isPassed);
       }
     }
   });
