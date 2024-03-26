@@ -11,17 +11,9 @@ w0r1d_d43m0n (end)
 
 ## Factions not yet completed
 
-Sector-12
-Bachman & Associates
-The Black Hand
-BitRunners
-Four Sigma
-Volhaven
 Tian Di Hui
 MegaCorp
 ECorp
-Fulcrum Secret Technologies
-Blade Industries
 OmniTek Incorporated
 Clarke Incorporated
 KuaiGong International
@@ -45,6 +37,14 @@ Netburners
 Aevum
 NiteSec
 CyberSec
+Sector-12
+Bachman & Associates
+Four Sigma
+The Black Hand
+Volhaven
+BitRunners
+Blade Industries
+Fulcrum Secret Technologies
 
 ## Factions with faction reputation augmentations
 

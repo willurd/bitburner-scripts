@@ -1,4 +1,4 @@
-import { BN_WEAKEN_FILE, BN_HACK_FILE, log, phase, setPhase, setStep, isCommandHost } from './bn-boot.js';
+import { BN_HACK_FILE, BN_WEAKEN_FILE, isCommandHost, log, phase, setPhase, setStep } from './bn-boot.js';
 
 export async function main(ns) {
   await phase(ns, 6, 'starting', async () => {
@@ -19,7 +19,7 @@ export async function main(ns) {
 
     if (!(await isCommandHost(ns))) {
       // Terminate this script and spawn the bn-hack.js script.
-      const serverRam = (await ns.getServerRam(thisHost))[0];
+      const serverRam = (await ns.getServerMaxRam(thisHost))[0];
       const weakenRam = await ns.getScriptRam(BN_WEAKEN_FILE, thisHost);
       const hackRam = await ns.getScriptRam(BN_HACK_FILE, thisHost);
       // Leave this much ram for making API requests.

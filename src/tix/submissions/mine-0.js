@@ -4,7 +4,7 @@ export async function setup(ns, state) {
 }
 
 export async function tick(ns, state) {
-  ns.stock.buy(state.symbols[0], 1);
+  ns.stock.buyStock(state.symbols[0], 1);
 }
 
 export async function done(ns, state) {

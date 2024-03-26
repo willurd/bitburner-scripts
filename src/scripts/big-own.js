@@ -1,11 +1,12 @@
-import { formatMoney } from './lib-money.js';
 import { forEachOwnedHost } from './lib-hosts.js';
+import { formatMoney } from './lib-money.js';
 
 export const BASIC_HACK_SCRIPT = 'basic-hack.js';
 
 const getAvailableRam = (ns, host) => {
-  const serverRam = ns.getServerRam(host);
-  return serverRam[0] - serverRam[1];
+  const maxRam = ns.getServerMaxRam(host);
+  const usedRam = ns.getServerUsedRam(host);
+  return maxRam - usedRam;
 };
 
 const getHostThreadsForScript = async (ns, host, script) => {

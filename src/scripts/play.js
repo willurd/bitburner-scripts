@@ -33,5 +33,5 @@ export async function main(ns) {
   await ns.run('own-daemon.js', 1);
   await ns.run('custom-stats.js', 1);
   await ns.run('sm-daemon.js', 1);
-  await ns.run('big-own.js', 1, 'sigma-cosmetics');
+  // await ns.run('big-own.js', 1, 'sigma-cosmetics');
 }

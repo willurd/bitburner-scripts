@@ -429,3 +429,72 @@ export const uniquePathsInAGridII = (grid) => {
 
   return memo[1][1];
 };
+
+// ----------------------------------------------------------------------
+// Compression I: RLE Compression
+// ----------------------------------------------------------------------
+
+export const rleCompression = (data) => {
+  if (data.length === 0) {
+    return data;
+  }
+
+  const output = [];
+  let char = undefined;
+  let count = 0;
+
+  for (let i = 0, len = data.length; i <= len; i++) {
+    if (i === len || count === 9 || data[i] !== char) {
+      if (char) {
+        output.push(count.toString() + char);
+      }
+
+      char = data[i];
+      count = 1;
+    } else {
+      count++;
+    }
+  }
+
+  return output.join('');
+};
+
+// ----------------------------------------------------------------------
+// Shortest Path in a Grid
+// ----------------------------------------------------------------------
+
+export const shortestPathInGrid = (grid) => {
+
+};
+
+// ----------------------------------------------------------------------
+// Proper 2-Coloring of a Graph
+// ----------------------------------------------------------------------
+
+export const graph2Coloring = (grid) => {
+
+};
+
+// ----------------------------------------------------------------------
+// Compression III: LZ Compression
+// ----------------------------------------------------------------------
+
+export const lzCompression = (grid) => {
+
+};
+
+// ----------------------------------------------------------------------
+// HammingCodes: Integer to Encoded Binary
+// ----------------------------------------------------------------------
+
+export const integerToEncodedBinary = (grid) => {
+
+};
+
+// ----------------------------------------------------------------------
+// HammingCodes: Encoded Binary to Integer
+// ----------------------------------------------------------------------
+
+export const encodedBinaryToInteger = (grid) => {
+
+};

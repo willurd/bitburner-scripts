@@ -58,7 +58,7 @@ export const sellPositions = (ns, stocks, isSimulated) => {
       );
 
       if (!isSimulated) {
-        ns.stock.sell(symbol, shares);
+        ns.stock.sellStock(symbol, shares);
       }
     }
   }

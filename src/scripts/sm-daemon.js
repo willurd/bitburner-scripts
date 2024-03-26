@@ -28,8 +28,8 @@
  * TODO: Implement shorting stocks when available.
  */
 
-import { loadConfig, updaterScript, commission, buildStock, sellPositions } from './sm-utils.js';
 import { formatMoney } from './lib-money.js';
+import { buildStock, commission, loadConfig, sellPositions, updaterScript } from './sm-utils.js';
 
 const canUseScript = (ns) => {
   const config = loadConfig(ns);
@@ -145,7 +145,7 @@ const tick = async (ns, state, config, iteration, isSimulated) => {
             );
 
             if (!isSimulated) {
-              ns.stock.buy(stock.symbol, shares);
+              ns.stock.buyStock(stock.symbol, shares);
               state.stocksChanged = true;
             }
           }

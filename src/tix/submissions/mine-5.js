@@ -54,7 +54,7 @@ export const sellPositions = (ns, stocks) => {
     if (shares > 0) {
       const ret = (price - averageBuyPrice) * shares - commission.total;
       // ns.tprint(`Selling ${shares} shares of ${symbol} at ${formatMoney(price)}, for a return of ${formatMoney(ret)}`);
-      ns.stock.sell(symbol, shares);
+      ns.stock.sellStock(symbol, shares);
     }
   }
 };
@@ -160,7 +160,7 @@ export async function tick(ns, state) {
             //   } at a total of ${formatMoney(totalCost)}.`,
             // );
 
-            ns.stock.buy(stock.symbol, shares);
+            ns.stock.buyStock(stock.symbol, shares);
           }
         }
       }

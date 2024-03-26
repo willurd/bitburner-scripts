@@ -159,7 +159,7 @@ export async function main(ns) {
     const availableHacks = hacks.filter(({ filename }) => ns.fileExists(filename, 'home'));
     const openPorts = availableHacks.length;
     const requiredOpenPorts = ns.getServerNumPortsRequired(host);
-    // const maxRam = ns.getServerRam(host)[0];
+    // const maxRam = ns.getServerMaxRam(host);
     // const money = ns.getServerMaxMoney(host);
 
     if (hackingLevel >= requiredHackingLevel && openPorts >= requiredOpenPorts) {

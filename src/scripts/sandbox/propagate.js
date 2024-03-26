@@ -1,5 +1,5 @@
 const hasRunningProcesses = (ns, host) => {
-  const usedMemory = ns.getServerRam(host)[1];
+  const usedMemory = ns.getServerUsedRam(host);
   return usedMemory > 0;
 };
 
@@ -9,7 +9,8 @@ const scpAndRun = async (ns, host, script, threads) => {
     return false;
   }
 
-  const [maxRam, usedRam] = ns.getServerRam(host);
+  const maxRam = ns.getServerMaxRam(host);
+  const usedRam = ns.getServerUsedRam(host);
   const availableRam = maxRam - usedRam;
   const scriptRam = ns.getScriptRam(script, host);
   const maxThreads = Math.floor(availableRam / scriptRam);

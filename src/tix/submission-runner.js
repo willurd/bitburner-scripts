@@ -297,7 +297,7 @@ const runGame = async (game) => {
     const position = ns.stock.getPosition(symbol);
 
     if (position[0] > 0) {
-      ns.stock.sell(symbol, position[0]);
+      ns.stock.sellStock(symbol, position[0]);
     }
   }
 

@@ -64,7 +64,7 @@ export async function main(ns) {
   }
 
   for (const host of hosts) {
-    const ram = ns.getServerRam(host)[0];
+    const ram = ns.getServerMaxRam(host);
     const money = ns.getServerMaxMoney(host);
     ns.tprint(`${host} is ownable (${ram}GB RAM, \$${money})`);
   }

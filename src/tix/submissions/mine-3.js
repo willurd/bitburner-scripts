@@ -66,7 +66,7 @@ const sellPosition = (ns, stock) => {
     ns.tprint(
       `Selling ${shares} shares of ${symbol} at ${formatMoney(price)}, for a return of ${formatMoney(returnValue)}`,
     );
-    ns.stock.sell(symbol, shares);
+    ns.stock.sellStock(symbol, shares);
   }
 };
 
@@ -146,7 +146,7 @@ const purchaseAllPossibleViableSharesOfStock = (ns, state, stocks, stock) => {
         )}.`,
       );
 
-      ns.stock.buy(stock.symbol, shares);
+      ns.stock.buyStock(stock.symbol, shares);
       state.hasPosition = true;
     }
   }

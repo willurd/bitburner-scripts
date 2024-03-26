@@ -2,36 +2,43 @@
  * "ls" over all hosts in the network.
  */
 
-import { forEachHost } from './lib-hosts.js';
 import {
   algorithmicStockTraderI,
   algorithmicStockTraderII,
   algorithmicStockTraderIII,
   algorithmicStockTraderIV,
   arrayJumpingGame,
+  encodedBinaryToInteger,
   findAllValidMathExpressions,
   findLargestPrimeFactor,
   generateIPAddresses,
+  graph2Coloring,
+  integerToEncodedBinary,
+  lzCompression,
   mergeOverlappingIntervals,
   minimumPathSumInATriangle,
+  rleCompression,
   sanitizeParenthesesInExpression,
+  shortestPathInGrid,
   spiralizeMatrix,
   subarrayWithMaximumSum,
   totalWaysToSum,
   uniquePathsInAGridI,
-  uniquePathsInAGridII,
+  uniquePathsInAGridII
 } from './contract-solutions.js';
+
+import { forEachHost } from './lib-hosts.js';
 
 /** @param {NS} ns */
 const unknownSolver = async (ns, host, file) => {
-  // const contractType = ns.codingcontract.getContractType(file, host);
-  // ns.tprint(`The contract type "${contractType}" is unknown.`);
+  const contractType = ns.codingcontract.getContractType(file, host);
+  ns.tprint(`The contract type "${contractType}" is unknown.`);
 };
 
 /** @param {NS} ns */
 const unsolvedSolver = async (ns, host, file) => {
-  // const contractType = ns.codingcontract.getContractType(file, host);
-  // ns.tprint(`The contract type "${contractType}" is unsolved.`);
+  const contractType = ns.codingcontract.getContractType(file, host);
+  ns.tprint(`The contract type "${contractType}" is unsolved.`);
 };
 
 const printContractInformation = async (ns, host, file) => {
@@ -113,6 +120,12 @@ const SOLVERS = {
   'Total Ways to Sum': makeSolver(totalWaysToSum),
   'Unique Paths in a Grid I': makeSolver(uniquePathsInAGridI),
   'Unique Paths in a Grid II': makeSolver(uniquePathsInAGridII),
+  'Compression I: RLE Compression': makeSolver(rleCompression),
+  'Shortest Path in a Grid': makeSolver(shortestPathInGrid),
+  'Proper 2-Coloring of a Graph': makeSolver(graph2Coloring),
+  'Compression III: LZ Compression': makeSolver(lzCompression),
+  'HammingCodes: Integer to Encoded Binary': makeSolver(integerToEncodedBinary),
+  'HammingCodes: Encoded Binary to Integer': makeSolver(encodedBinaryToInteger),
 };
 
 const defaultMinTriesRemaining = 5;

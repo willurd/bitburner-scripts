@@ -8,13 +8,14 @@ export const BASIC_HACK_SCRIPT = 'basic-hack.js';
 const debug = false;
 
 const getAvailableRam = (ns, host) => {
-  const serverRam = ns.getServerRam(host);
-  return serverRam[0] - serverRam[1];
+  const maxRam = ns.getServerMaxRam(host);
+  const usedRam = ns.getServerUsedRam(host);
+  return maxRam - usedRam;
 };
 
 const hasScriptsRunning = (ns, host) => {
-  const serverRam = ns.getServerRam(host);
-  return serverRam[1] > 0;
+  const usedRam = ns.getServerUsedRam(host);
+  return usedRam > 0;
 };
 
 const scpAndRun = async (ns, host, script, threads = 1, ...args) => {

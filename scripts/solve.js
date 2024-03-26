@@ -1,13 +1,18 @@
 require('babel-register')({ presets: ['env'] });
 
 const allValidIpsGivenNumber = require('../src/contract-solvers/allValidIpsGivenNumber').default;
-const largestPrimeFactor = require('../src/contract-solvers/largestPrimeFactor').default;
-const numberOfWaysToWriteAsSum = require('../src/contract-solvers/numberOfWaysToWriteAsSum').default;
-const { default: spiralOrderMatrix, mtx } = require('../src/contract-solvers/spiralOrderMatrix');
 const canJumpToLastIndex = require('../src/contract-solvers/canJumpToLastIndex').default;
-const mergeOverlappingIntervals = require('../src/contract-solvers/mergeOverlappingIntervals').default;
-const stockMarketProfit = require('../src/contract-solvers/stockMarketProfit').default;
+const findAllValidMathExpressions = require('../src/contract-solvers/findAllValidMathExpressions').default;
+const largestPrimeFactor = require('../src/contract-solvers/largestPrimeFactor').default;
 const largestSubArraySum = require('../src/contract-solvers/largestSubArraySum').default;
+const mergeOverlappingIntervals = require('../src/contract-solvers/mergeOverlappingIntervals').default;
+const minimumPathSumInATriangle = require('../src/contract-solvers/minimumPathSumInATriangle').default;
+const numberOfWaysToWriteAsSum = require('../src/contract-solvers/numberOfWaysToWriteAsSum').default;
+const sanitizeParenthesesInExpression = require('../src/contract-solvers/sanitizeParenthesesInExpression').default;
+const { default: spiralOrderMatrix, mtx } = require('../src/contract-solvers/spiralOrderMatrix');
+const stockMarketProfit = require('../src/contract-solvers/stockMarketProfit').default;
+const uniquePathsInAGridI = require('../src/contract-solvers/uniquePathsInAGridI').default;
+const uniquePathsInAGridII = require('../src/contract-solvers/uniquePathsInAGridII').default;
 
 const solvers = [
   {
@@ -19,6 +24,21 @@ const solvers = [
     },
   },
   {
+    name: 'canJumpToLastIndex',
+    solve: (numsString) => {
+      const nums = numsString.split(',').map(Number);
+      const result = canJumpToLastIndex(nums);
+      console.log(result);
+    },
+  },
+  {
+    name: 'findAllValidMathExpressions',
+    solve: () => {
+      throw new Error('TODO');
+      findAllValidMathExpressions();
+    }
+  },
+  {
     name: 'largestPrimeFactor',
     solve: (num) => {
       const result = largestPrimeFactor(parseInt(num, 10));
@@ -26,24 +46,10 @@ const solvers = [
     },
   },
   {
-    name: 'numberOfWaysToWriteAsSum',
-    solve: (num) => {
-      const result = numberOfWaysToWriteAsSum(parseInt(num, 10));
-      console.log(result);
-    },
-  },
-  {
-    name: 'spiralOrderMatrix',
-    solve: (...matrix) => {
-      const result = spiralOrderMatrix(mtx([matrix.join('\n')]));
-      console.log(`[${result.join(',')}]`);
-    },
-  },
-  {
-    name: 'canJumpToLastIndex',
+    name: 'largestSubArraySum',
     solve: (numsString) => {
       const nums = numsString.split(',').map(Number);
-      const result = canJumpToLastIndex(nums);
+      const result = largestSubArraySum(nums);
       console.log(result);
     },
   },
@@ -56,6 +62,34 @@ const solvers = [
     },
   },
   {
+    name: 'minimumPathSumInATriangle',
+    solve: () => {
+      throw new Error('TODO');
+      minimumPathSumInATriangle();
+    }
+  },
+  {
+    name: 'numberOfWaysToWriteAsSum',
+    solve: (num) => {
+      const result = numberOfWaysToWriteAsSum(parseInt(num, 10));
+      console.log(result);
+    },
+  },
+  {
+    name: 'sanitizeParenthesesInExpression',
+    solve: (input) => {
+      const result = sanitizeParenthesesInExpression(input);
+      console.log(result);
+    },
+  },
+  {
+    name: 'spiralOrderMatrix',
+    solve: (...matrix) => {
+      const result = spiralOrderMatrix(mtx([matrix.join('\n')]));
+      console.log(`[${result.join(',')}]`);
+    },
+  },
+  {
     name: 'stockMarketProfit',
     solve: (numsString, maxTransactionsString) => {
       const nums = numsString.split(',').map(Number);
@@ -65,12 +99,18 @@ const solvers = [
     },
   },
   {
-    name: 'largestSubArraySum',
-    solve: (numsString) => {
-      const nums = numsString.split(',').map(Number);
-      const result = largestSubArraySum(nums);
-      console.log(result);
-    },
+    name: 'uniquePathsInAGridI',
+    solve: () => {
+      throw new Error('TODO');
+      uniquePathsInAGridI();
+    }
+  },
+  {
+    name: 'uniquePathsInAGridII',
+    solve: () => {
+      throw new Error('TODO');
+      uniquePathsInAGridII();
+    }
   },
 ];
 
@@ -94,7 +134,7 @@ const main = () => {
 
   if (!problem?.trim()) {
     console.error('Please provide a problem to solve. Choose one of:');
-    console.log(getSolverNames().join(', '));
+    console.log(getSolverNames().map(l => ` - ${l}`).join('\n'));
     usage();
   }
 
