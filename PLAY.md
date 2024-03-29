@@ -20,7 +20,7 @@ Buy programs as available.
 
 Add as many NeuroFlux Governors as you can before installing.
 
-- Bachman & Associates
+- Bachman & Associates (in Aevum)
 - Install
 - Four Sigma
 - Install

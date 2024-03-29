@@ -75,12 +75,10 @@ const tick = async (ns, state, config, iteration, isSimulated) => {
   const stocks = config.symbols
     .map((symbol) => buildStock(ns, symbol))
     .sort((a, b) => {
-      if (a.forecast === b.forecast) {
-        // If the forecase is the same, get the stock that will grow faster.
-        return b.volatility - a.volatility;
-      } else {
-        // Otherwise get the stock that is more likely to grow.
+      if (a.forecast !== b.forecast) {
         return b.forecast - a.forecast;
+      } else {
+        return b.volatility - a.volatility;
       }
     });
   const heldStocks = getHeldStocks(stocks);
@@ -98,7 +96,7 @@ const tick = async (ns, state, config, iteration, isSimulated) => {
     //   ns.print(`${symbol} - price=${price}, position=${position}, volatility=${volatility}, forecast=${forecast}`);
     // }
 
-    const stockPurchaseCount = goodStocks.length; // 3;
+    const stockPurchaseCount = goodStocks.length; // 3
     const bestStocks = goodStocks.slice(0, stockPurchaseCount);
     const bestStockSymbols = bestStocks.map((s) => s.symbol);
 

@@ -11,7 +11,13 @@ w0r1d_d43m0n (end)
 
 ## Factions not yet completed
 
-Tian Di Hui
+The Black Hand
+Bachman & Associates
+Aevum
+Four Sigma
+Volhaven
+Blade Industries
+Fulcrum Secret Technologies
 MegaCorp
 ECorp
 OmniTek Incorporated
@@ -33,18 +39,12 @@ The Dark Army
 
 ## All augmentations installed
 
-Netburners
-Aevum
-NiteSec
 CyberSec
+NiteSec
+Netburners
 Sector-12
-Bachman & Associates
-Four Sigma
-The Black Hand
-Volhaven
+Tian Di Hui
 BitRunners
-Blade Industries
-Fulcrum Secret Technologies
 
 ## Factions with faction reputation augmentations
 

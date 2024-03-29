@@ -41,3 +41,7 @@ export async function main(ns) {
 
   // ns.write('owned.txt', `${host}\n`, 'a');
 }
+
+export function autocomplete(data, args) {
+  return data.servers;
+}

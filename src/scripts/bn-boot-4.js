@@ -1,4 +1,4 @@
-import { WAIT_MS, BN_FILES, BN_FLAG_FILE, phase, setStep, setPropagatedTo, getAdjacentHosts } from './bn-boot.js';
+import { BN_FILES, BN_FLAG_FILE, WAIT_MS, getAdjacentHosts, phase, setPropagatedTo, setStep } from './bn-boot.js';
 
 export async function main(ns) {
   await phase(ns, 4, 'propagation', async () => {
@@ -28,7 +28,7 @@ export async function main(ns) {
       await setStep(ns, `propagating botnet files`, { i, host });
 
       for (const bnFile of BN_FILES) {
-        while (!(await ns.scp(bnFile, thisHost, host))) {
+        while (!(await ns.scp(bnFile, host, thisHost))) {
           await ns.sleep(WAIT_MS);
         }
       }

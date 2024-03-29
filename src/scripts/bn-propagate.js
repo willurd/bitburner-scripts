@@ -21,7 +21,7 @@ const hasScriptsRunning = (ns, host) => {
 const scpAndRun = async (ns, host, script, threads = 1, ...args) => {
   const thisHost = ns.getHostname();
 
-  if (!(await ns.scp(script, thisHost, host))) {
+  if (!(await ns.scp(script, host, thisHost))) {
     ns.tprint(`${host}: Unable to copy ${script}.`);
     return false;
   }

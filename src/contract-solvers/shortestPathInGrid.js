@@ -30,5 +30,5 @@
 
 // Answer: ''
 export default function shortestPathInGrid(data) {
-
+  
 }

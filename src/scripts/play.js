@@ -29,9 +29,11 @@ like reporting net worth over time (e.g. in a chart of the last day/12 hours/hou
 export async function main(ns) {
   // For now, this program simply runs the other programs I would
   // otherwise run manually after installing augmentations.
+  await ns.run('hacknet.js', 1);
   await ns.run('contracts.js', 1, 'daemon');
   await ns.run('own-daemon.js', 1);
-  await ns.run('custom-stats.js', 1);
+  // await ns.run('custom-stats.js', 1);
+  await ns.run('hud.js', 1);
+  await ns.run('big-own.js', 1, 'joesguns');
   await ns.run('sm-daemon.js', 1);
-  // await ns.run('big-own.js', 1, 'sigma-cosmetics');
 }

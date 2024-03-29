@@ -4,7 +4,7 @@ const hasRunningProcesses = (ns, host) => {
 };
 
 const scpAndRun = async (ns, host, script, threads) => {
-  if (!(await ns.scp(script, ns.getHostname(), host))) {
+  if (!(await ns.scp(script, host, ns.getHostname()))) {
     ns.tprint(`${host}: Unable to scp ${script}`);
     return false;
   }

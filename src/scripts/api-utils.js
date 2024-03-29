@@ -16,7 +16,7 @@ export const sendRequest = async (ns, host, action, ...args) => {
   }
 
   // Grab the response file from the server.
-  ns.scp(responseFileName, host, ns.getHostname());
+  ns.scp(responseFileName, ns.getHostname(), host);
 
   // We have our response now.
   const response = ns.read(responseFileName);

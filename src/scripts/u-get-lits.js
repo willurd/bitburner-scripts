@@ -15,7 +15,7 @@ export async function main(ns) {
     for (const file of files) {
       ns.tprint(`Copying file "${file}" from host "${host}" to home`);
 
-      if (await ns.scp(file, host, 'home')) {
+      if (await ns.scp(file, 'home', host)) {
         ns.rm(file, host);
       } else {
         ns.tprint(`Unable to copy file "${file}" from host "${host}" to home`);

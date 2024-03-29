@@ -57,3 +57,7 @@ export async function main(ns) {
   ns.tprint(`Owning ${hostToOwn} with max money ${formatMoney(ns.getServerMaxMoney(hostToOwn))}`);
   await bigOwn(ns, hostToOwn);
 }
+
+export function autocomplete(data, args) {
+  return data.servers;
+}
